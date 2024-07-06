@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <style name="Theme.NewFoodMe" parent="android:Theme.Material.Light.NoActionBar">
-
-        <!-- add background for loading page when app starts -->
-        <item name="android:windowBackground">@drawable/login_registration_background</item>
-    </style>
-</resources>
