@@ -3,7 +3,7 @@ package com.example.newfoodme.ui.theme.login
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
+import androidx.core.view.WindowCompat // Updated import for enableEdgeToEdge
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -42,7 +42,7 @@ import com.example.newfoodme.R
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
+        WindowCompat.setDecorFitsSystemWindows(window, false)
         setContent {
             NewFoodMeTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
@@ -72,6 +72,19 @@ fun LoginScreen(modifier: Modifier = Modifier) {
             modifier = Modifier.fillMaxSize(),
             contentScale = ContentScale.Crop
         )
+
+        // Logo platzierung auf login seite
+        Column(
+            modifier = Modifier
+                .padding(top = 30.dp),
+            horizontalAlignment = Alignment.CenterHorizontally // horizontal zentrieren
+        ) {
+
+            Image (
+                painter = painterResource(id = R.drawable.foodme_logo),
+                contentDescription = null
+            )
+        }
 
         // login form
         Column(
