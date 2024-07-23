@@ -3,7 +3,7 @@ package com.example.newfoodme.ui.theme.login
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.core.view.WindowCompat // Updated import for enableEdgeToEdge
+import androidx.core.view.WindowCompat
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -59,13 +59,10 @@ fun LoginScreen(modifier: Modifier = Modifier) {
     var username by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
 
-    // box die die gesamte seite beinhaltet
     Box(
         modifier = modifier
             .fillMaxSize()
     ) {
-
-        // background image
         Image(
             painter = painterResource(id = R.drawable.login_registration_background_dark),
             contentDescription = null,
@@ -73,115 +70,66 @@ fun LoginScreen(modifier: Modifier = Modifier) {
             contentScale = ContentScale.Crop
         )
 
-        // Logo platzierung auf login seite
         Column(
             modifier = Modifier
                 .padding(top = 30.dp),
-            horizontalAlignment = Alignment.CenterHorizontally // horizontal zentrieren
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-
-            Image (
+            Image(
                 painter = painterResource(id = R.drawable.foodme_logo),
                 contentDescription = null
             )
         }
 
-        // login form
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(16.dp) // seitenabstand
+                .padding(16.dp)
                 .padding(top = 420.dp),
-            horizontalAlignment = Alignment.CenterHorizontally // horizontal zentrieren
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-
-            // überschrift
             Text(
                 text = "Login",
                 style = MaterialTheme.typography.headlineLarge.copy(fontSize = 38.sp),
                 color = Color.White
             )
 
-            // space between text and boxes
             Spacer(modifier = Modifier.height(20.dp))
 
-            // Username input field; have to be changed to email
-            BasicTextField(
+            CustomTextField(
                 value = username,
                 onValueChange = { username = it },
-
-                // textfield decoration
-                decorationBox = { innerTextField ->
-
-                    // email input box
-                    Box(
-
-                        //die input boxen können hier beliebig angepasst werden
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .background(Color.White, shape = RoundedCornerShape(50.dp))
-                            .border(2.dp, Color.Black, shape = RoundedCornerShape(50.dp))
-                            .padding(16.dp)
-                    ) {
-
-                        // wenn nichts eingegeben ist
-                        if (username.isEmpty()) {
-                            Text("E-Mail-Adresse", color = Color(0xFFFFA500))
-                        }
-                        innerTextField()
-                    }
-                },
-                singleLine = true
+                placeholder = "E-Mail-Adresse",
+                modifier = Modifier.fillMaxWidth()
             )
 
-            // Space between username and password input fields
             Spacer(modifier = Modifier.height(16.dp))
 
-            // passowrt eingabefeld
-            BasicTextField(
+            CustomTextField(
                 value = password,
                 onValueChange = { password = it },
-                visualTransformation = PasswordVisualTransformation(), //passwort verstecken bzw wird in sternchen angezeigt
-                decorationBox = { innerTextField ->
-
-                    // Box for the password input
-                    Box(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .background(Color.White, shape = RoundedCornerShape(50.dp))
-                            .border(2.dp, Color.Black, shape = RoundedCornerShape(50.dp))
-                            .padding(16.dp)
-                    ) {
-
-                        // wenn nichts eingegeben ist
-                        if (password.isEmpty()) {
-                            Text("Password", color = Color(0xFFFFA500))
-                        }
-                        innerTextField()
-                    }
-                },
-                singleLine = true
+                placeholder = "Password",
+                // visualTransformation = PasswordVisualTransformation(),
+                modifier = Modifier.fillMaxWidth()
             )
 
-            // Space between password input and login button
+
             Spacer(modifier = Modifier.height(32.dp))
 
-            // Login button
             MyButton()
         }
     }
 }
 
-// login button
 @Composable
 fun MyButton() {
     Button(
-        onClick = { /* Spacer until database is finished */ },
+        onClick = { /* Placeholder until database is finished */ },
         modifier = Modifier
-            .fillMaxWidth() // füllt die gesamte bildschrimbreite bsi zu dem punkt aus bis zu dem wir den seitenabstand anfangs festgelegt haben
-            .border(2.dp, Color.Black, shape = RoundedCornerShape(50.dp)), //  Schwarzer Rand mit abgerundeten ecken
-        colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFFFA500)) // Color of the button
+            .fillMaxWidth()
+            .border(2.dp, Color.Black, shape = RoundedCornerShape(50.dp)),
+        colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFFFA500))
     ) {
-        Text(text = "Login", color = Color.White) // Color of the text
+        Text(text = "Login", color = Color.White)
     }
 }
