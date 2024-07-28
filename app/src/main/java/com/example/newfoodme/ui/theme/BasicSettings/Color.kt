@@ -1,4 +1,4 @@
-package com.example.newfoodme.ui.theme
+package com.example.newfoodme.ui.theme.BasicSettings
 
 import androidx.compose.ui.graphics.Color
 
