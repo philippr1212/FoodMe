@@ -56,8 +56,8 @@ fun LoginScreen(modifier: Modifier = Modifier) {
     val context = LocalContext.current
     val sharedPreferences = context.getSharedPreferences("LoginPrefs", Context.MODE_PRIVATE)
 
-    var username by remember { mutableStateOf(sharedPreferences.getString("username", "") ?: "") }
-    var password by remember { mutableStateOf(sharedPreferences.getString("password", "") ?: "") }
+    var email by remember { mutableStateOf(sharedPreferences.getString("email", "") ?: "") }
+    var passwort by remember { mutableStateOf(sharedPreferences.getString("passwort", "") ?: "") }
 
     Box(
         modifier = modifier
@@ -97,8 +97,8 @@ fun LoginScreen(modifier: Modifier = Modifier) {
             Spacer(modifier = Modifier.height(20.dp))
 
             CustomTextField(
-                value = username,
-                onValueChange = { username = it },
+                value = email,
+                onValueChange = { email = it },
                 placeholder = "E-Mail-Adresse",
                 modifier = Modifier.fillMaxWidth()
             )
@@ -106,28 +106,39 @@ fun LoginScreen(modifier: Modifier = Modifier) {
             Spacer(modifier = Modifier.height(16.dp))
 
             CustomTextField(
-                value = password,
-                onValueChange = { password = it },
+                value = passwort,
+                onValueChange = { passwort = it },
                 placeholder = "Password",
                 // visualTransformation = PasswordVisualTransformation(),
                 modifier = Modifier.fillMaxWidth()
             )
 
-            Spacer(modifier = Modifier.height(32.dp))
+            Spacer(modifier = Modifier.height(16.dp))
 
-            MyButton(username = username, password = password, onLoginClick = {
-                with(sharedPreferences.edit()) {
-                    putString("username", username)
-                    putString("password", password)
-                    apply()
-                }
-            })
+            Text(
+                text = "Noch keinen Account? Hier registrieren!",
+                style = MaterialTheme.typography.headlineLarge.copy(fontSize = 18.sp),
+                color = Color.White
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            com.example.newfoodme.ui.theme.registration.MyButton(
+                username = email,
+                password = passwort,
+                onLoginClick = {
+                    with(sharedPreferences.edit()) {
+                        putString("email", email)
+                        putString("passwort", passwort)
+                        apply()
+                    }
+                })
         }
     }
 }
 
 @Composable
-fun MyButton(username: String, password: String, onLoginClick: () -> Unit) {
+fun MyButton2(username: String, password: String, onLoginClick: () -> Unit) {
     Button(
         onClick = { onLoginClick() },
         modifier = Modifier
@@ -135,6 +146,6 @@ fun MyButton(username: String, password: String, onLoginClick: () -> Unit) {
             .border(2.dp, Color.Black, shape = RoundedCornerShape(50.dp)),
         colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFFFA500))
     ) {
-        Text(text = "Login", color = Color.White)
+        Text(text = "Login", color = Color.White) //reperieren, text wird nicht korrekt angezeigt
     }
 }
