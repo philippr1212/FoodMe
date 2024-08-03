@@ -12,17 +12,20 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.NewFoodMe"
         tools:targetApi="31">
+
+        <!-- MainActivity als Startaktivität festlegen -->
         <activity
-            android:name=".ui.theme.login.MainActivity"
+            android:name=".ui.theme.registration.MainActivity"
             android:exported="true"
             android:label="@string/app_name"
             android:theme="@style/Theme.NewFoodMe">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-    </application>
 
+    </application>
 </manifest>
+
+

@@ -1,4 +1,4 @@
-package com.example.newfoodme.ui.theme.login
+package com.example.newfoodme.ui.theme.registration
 
 import android.content.Context
 import android.os.Bundle
@@ -85,16 +85,35 @@ fun LoginScreen(modifier: Modifier = Modifier) {
             modifier = Modifier
                 .fillMaxSize()
                 .padding(16.dp)
-                .padding(top = 420.dp),
+                .padding(top = 330.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
-                text = "Login",
+                text = "Registrierung",
                 style = MaterialTheme.typography.headlineLarge.copy(fontSize = 38.sp),
                 color = Color.White
             )
 
             Spacer(modifier = Modifier.height(20.dp))
+
+            CustomTextField(
+                value = username,
+                onValueChange = { username = it },
+                placeholder = "Vorname",
+                modifier = Modifier.fillMaxWidth()
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            CustomTextField(
+                value = password,
+                onValueChange = { password = it },
+                placeholder = "Nachname",
+                // visualTransformation = PasswordVisualTransformation(),
+                modifier = Modifier.fillMaxWidth()
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
 
             CustomTextField(
                 value = username,
@@ -106,10 +125,9 @@ fun LoginScreen(modifier: Modifier = Modifier) {
             Spacer(modifier = Modifier.height(16.dp))
 
             CustomTextField(
-                value = password,
-                onValueChange = { password = it },
-                placeholder = "Password",
-                // visualTransformation = PasswordVisualTransformation(),
+                value = username,
+                onValueChange = { username = it },
+                placeholder = "Passwort",
                 modifier = Modifier.fillMaxWidth()
             )
 
@@ -135,6 +153,6 @@ fun MyButton(username: String, password: String, onLoginClick: () -> Unit) {
             .border(2.dp, Color.Black, shape = RoundedCornerShape(50.dp)),
         colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFFFA500))
     ) {
-        Text(text = "Login", color = Color.White)
+        Text(text = "Registrierung", color = Color.White)
     }
 }

@@ -1,4 +1,4 @@
-package com.example.newfoodme.ui.theme.login
+package com.example.newfoodme.ui.theme.classes
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
