@@ -22,17 +22,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="6a2268e3-28cf-47c4-91bf-fe2e949f42b0" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/example/newfoodme/ui/theme/profilepage/ProfilePage.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_profile_page.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/app/build.gradle.kts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/newfoodme/ui/theme/Color.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/newfoodme/ui/theme/BasicSettings/Color.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/newfoodme/ui/theme/Theme.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/newfoodme/ui/theme/BasicSettings/Theme.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/newfoodme/ui/theme/Type.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/newfoodme/ui/theme/BasicSettings/Type.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/newfoodme/ui/theme/login/LoginRegistration_classes.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/newfoodme/ui/theme/classes/LoginRegistration_classes.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/newfoodme/ui/theme/login/MainActivity.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/newfoodme/ui/theme/login/MainActivity.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gradle/libs.versions.toml" beforeDir="false" afterPath="$PROJECT_DIR$/gradle/libs.versions.toml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/newfoodme/ui/theme/profilepage/ProfilePage.kt" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -67,6 +60,7 @@
   </component>
   <component name="HighlightingSettingsPerFile">
     <setting file="file://$PROJECT_DIR$/app/src/main/java/com/example/newfoodme/ui/theme/login/MainActivity.kt" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/app/src/main/java/menu/nav_menu.xml" root0="SKIP_HIGHLIGHTING" />
   </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 8
