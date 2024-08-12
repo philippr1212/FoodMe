@@ -2,6 +2,7 @@ package com.example.newfoodme.ui.theme.registration
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Patterns
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.core.view.WindowCompat
@@ -44,7 +45,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             NewFoodMeTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    LoginScreen(modifier = Modifier.padding(innerPadding))
+                    RegistrationScreen(modifier = Modifier.padding(innerPadding))
                 }
             }
         }
@@ -52,12 +53,20 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun LoginScreen(modifier: Modifier = Modifier) {
+fun RegistrationScreen(modifier: Modifier = Modifier) {
     val context = LocalContext.current
     val sharedPreferences = context.getSharedPreferences("LoginPrefs", Context.MODE_PRIVATE)
 
-    var username by remember { mutableStateOf(sharedPreferences.getString("username", "") ?: "") }
-    var password by remember { mutableStateOf(sharedPreferences.getString("password", "") ?: "") }
+    var vorname by remember { mutableStateOf(sharedPreferences.getString("vorname", "") ?: "") }
+    var nachname by remember { mutableStateOf(sharedPreferences.getString("nachname", "") ?: "") }
+    var email by remember { mutableStateOf(sharedPreferences.getString("email", "") ?: "") }
+    var passwort by remember { mutableStateOf(sharedPreferences.getString("passwort", "") ?: "") }
+    var isEmailValid by remember { mutableStateOf(true) }
+
+    // Prüft ob im Eingabefeld eine gültige e mail adresse vorliegt
+    fun isValidEmail(email: String): Boolean {
+        return Patterns.EMAIL_ADDRESS.matcher(email).matches()
+    }
 
     Box(
         modifier = modifier
@@ -85,9 +94,10 @@ fun LoginScreen(modifier: Modifier = Modifier) {
             modifier = Modifier
                 .fillMaxSize()
                 .padding(16.dp)
-                .padding(top = 330.dp),
+                .padding(top = 300.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
+
             Text(
                 text = "Registrierung",
                 style = MaterialTheme.typography.headlineLarge.copy(fontSize = 38.sp),
@@ -97,8 +107,8 @@ fun LoginScreen(modifier: Modifier = Modifier) {
             Spacer(modifier = Modifier.height(20.dp))
 
             CustomTextField(
-                value = username,
-                onValueChange = { username = it },
+                value = vorname,
+                onValueChange = { vorname = it },
                 placeholder = "Vorname",
                 modifier = Modifier.fillMaxWidth()
             )
@@ -106,38 +116,61 @@ fun LoginScreen(modifier: Modifier = Modifier) {
             Spacer(modifier = Modifier.height(16.dp))
 
             CustomTextField(
-                value = password,
-                onValueChange = { password = it },
+                value = nachname,
+                onValueChange = { nachname = it },
                 placeholder = "Nachname",
-                // visualTransformation = PasswordVisualTransformation(),
                 modifier = Modifier.fillMaxWidth()
             )
 
             Spacer(modifier = Modifier.height(16.dp))
 
             CustomTextField(
-                value = username,
-                onValueChange = { username = it },
+                value = email,
+                onValueChange = {
+                    email = it
+                    isEmailValid = isValidEmail(it)
+                },
                 placeholder = "E-Mail-Adresse",
                 modifier = Modifier.fillMaxWidth()
             )
 
+            // ! kehrt Befehl um; FEhlermeldung wird angezeigt wenn die email addresse nicht gültig ist
+            if (!isEmailValid) {
+                Text(
+                    text = "Bitte geben Sie eine gültige E-Mail-Adresse ein.",
+                    color = Color.Red,
+                    style = MaterialTheme.typography.bodyMedium
+                )
+            }
+
             Spacer(modifier = Modifier.height(16.dp))
 
             CustomTextField(
-                value = username,
-                onValueChange = { username = it },
+                value = passwort,
+                onValueChange = { passwort = it },
                 placeholder = "Passwort",
                 modifier = Modifier.fillMaxWidth()
             )
 
-            Spacer(modifier = Modifier.height(32.dp))
+            Spacer(modifier = Modifier.height(16.dp))
 
-            MyButton(username = username, password = password, onLoginClick = {
-                with(sharedPreferences.edit()) {
-                    putString("username", username)
-                    putString("password", password)
-                    apply()
+            Text(
+                text = "Schon Registriert? Hier geht's zum Login!",
+                style = MaterialTheme.typography.headlineLarge.copy(fontSize = 18.sp),
+                color = Color.White
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            MyButton(username = email, password = passwort, onLoginClick = {
+                if (isEmailValid) {
+                    with(sharedPreferences.edit()) {
+                        putString("vorname", vorname)
+                        putString("nachname", nachname)
+                        putString("email", email)
+                        putString("passwort", passwort)
+                        apply()
+                    }
                 }
             })
         }

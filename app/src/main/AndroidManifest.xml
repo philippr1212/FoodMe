@@ -13,9 +13,9 @@
         android:theme="@style/Theme.NewFoodMe"
         tools:targetApi="31">
 
-        <!-- MainActivity als Startaktivität festlegen -->
+        <!-- Startaktivität festlegen -->
         <activity
-            android:name=".ui.theme.registration.MainActivity"
+            android:name=".ui.theme.login.MainActivity"
             android:exported="true"
             android:label="@string/app_name"
             android:theme="@style/Theme.NewFoodMe">

@@ -2,6 +2,7 @@ package com.example.newfoodme.ui.theme.login
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Patterns
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.core.view.WindowCompat
@@ -58,6 +59,12 @@ fun LoginScreen(modifier: Modifier = Modifier) {
 
     var email by remember { mutableStateOf(sharedPreferences.getString("email", "") ?: "") }
     var passwort by remember { mutableStateOf(sharedPreferences.getString("passwort", "") ?: "") }
+    var isEmailValid by remember { mutableStateOf(true) }
+
+    // Prüft ob im Eingabefeld eine gültige e mail adresse vorliegt
+    fun isValidEmail(email: String): Boolean {
+        return Patterns.EMAIL_ADDRESS.matcher(email).matches()
+    }
 
     Box(
         modifier = modifier
@@ -98,10 +105,22 @@ fun LoginScreen(modifier: Modifier = Modifier) {
 
             CustomTextField(
                 value = email,
-                onValueChange = { email = it },
+                onValueChange = {
+                    email = it
+                    isEmailValid = isValidEmail(it)
+                },
                 placeholder = "E-Mail-Adresse",
                 modifier = Modifier.fillMaxWidth()
             )
+
+            // ! kehrt Befehl um; FEhlermeldung wird angezeigt wenn die email addresse nicht gültig ist
+            if (!isEmailValid) {
+                Text(
+                    text = "Bitte geben Sie eine gültige E-Mail-Adresse ein.",
+                    color = Color.Red,
+                    style = MaterialTheme.typography.bodyMedium
+                )
+            }
 
             Spacer(modifier = Modifier.height(16.dp))
 
@@ -109,7 +128,6 @@ fun LoginScreen(modifier: Modifier = Modifier) {
                 value = passwort,
                 onValueChange = { passwort = it },
                 placeholder = "Password",
-                // visualTransformation = PasswordVisualTransformation(),
                 modifier = Modifier.fillMaxWidth()
             )
 
@@ -127,10 +145,12 @@ fun LoginScreen(modifier: Modifier = Modifier) {
                 username = email,
                 password = passwort,
                 onLoginClick = {
-                    with(sharedPreferences.edit()) {
-                        putString("email", email)
-                        putString("passwort", passwort)
-                        apply()
+                    if (isEmailValid) {
+                        with(sharedPreferences.edit()) {
+                            putString("email", email)
+                            putString("passwort", passwort)
+                            apply()
+                        }
                     }
                 })
         }
@@ -146,6 +166,6 @@ fun MyButton2(username: String, password: String, onLoginClick: () -> Unit) {
             .border(2.dp, Color.Black, shape = RoundedCornerShape(50.dp)),
         colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFFFA500))
     ) {
-        Text(text = "Login", color = Color.White) //reperieren, text wird nicht korrekt angezeigt
+        Text(text = "Login", color = Color.White) // Textfarbe korrigiert
     }
 }
