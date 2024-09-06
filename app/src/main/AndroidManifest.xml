@@ -15,7 +15,7 @@
 
         <!-- Startaktivität festlegen -->
         <activity
-            android:name="com.example.newfoodme.ui.theme.login.MainActivity"
+            android:name="com.example.newfoodme.ui.theme.registration.RegistrationActivity"
             android:exported="true"
             android:label="@string/app_name"
             android:theme="@style/Theme.NewFoodMe">
@@ -23,6 +23,14 @@
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+
+        <!-- MainActivity hinzufügen -->
+        <activity
+            android:name="com.example.newfoodme.ui.theme.login.MainActivity"
+            android:exported="true"
+            android:label="@string/app_name"
+            android:theme="@style/Theme.NewFoodMe">
         </activity>
 
     </application>
