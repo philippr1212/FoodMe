@@ -53,16 +53,19 @@ fun CustomTextField(
 //button for login and registration
 class MyButton(
     var text: String,
+    var vorname: String = "",
+    var nachname: String = "",
     var username: String = "",
     var password: String = "",
-    var onButtonClick: () -> Unit = {},
-    vorname: String,
-    nachname: String
+    var onButtonClick: (String, String, String, String) -> Unit = { _, _, _, _ -> }
 ) {
     @Composable
     fun Display() {
         Button(
-            onClick = { onButtonClick() },
+            onClick = {
+
+                onButtonClick(vorname, nachname, username, password)
+            },
             modifier = Modifier
                 .fillMaxWidth()
                 .border(2.dp, Color.Black, shape = RoundedCornerShape(50.dp)),

@@ -202,33 +202,19 @@ fun RegistrationScreen(modifier: Modifier = Modifier) {
             Spacer(modifier = Modifier.height(16.dp))
 
             // Registration button
-            val registerButton = MyButton1(
+            val username = ""
+            val password = ""
+            MyButton1(
                 text = "Registrieren",
                 vorname = vorname,
                 nachname = nachname,
-                username = email,
-                password = passwort,
-                onButtonClick = {
-                    if (isEmailValid && isValidName(vorname) && isValidName(nachname) && isValidPassword(passwort)) {
-                        // Daten in SharedPreferences speichern
-                        with(sharedPreferences.edit()) {
-                            putString("vorname", vorname)
-                            putString("nachname", nachname)
-                            putString("email", email)
-                            putString("passwort", passwort)
-                            apply()
-                        }
-
-                        // Weiterleitung zu mainactivity
-                        val intent = Intent(context, MainActivity::class.java)
-                        context.startActivity(intent)
-
-                        // Nutzer kann nicht zurücknavigieren
-                        (context as? RegistrationActivity)?.finish()
-                    }
+                username = username,
+                password = password,
+                onButtonClick = { vorname, nachname, username, password ->
+                    // Hier kannst du die Registrierungslogik implementieren
+                    println("Vorname: $vorname, Nachname: $nachname, E-Mail: $username, Passwort: $password")
                 }
-            )
-            registerButton.Display()
+            ).Display()
 
         }
     }

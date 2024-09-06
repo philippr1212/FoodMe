@@ -144,6 +144,23 @@ fun LoginScreen(modifier: Modifier = Modifier) {
 
             Spacer(modifier = Modifier.height(16.dp))
 
+            // Login-Button
+            val username = ""
+            val password = ""
+            MyButton(
+                text = "Login",
+                username = username,
+                password = password,
+                onButtonClick = { _, _, username, password ->
+
+                    if (username.isNotEmpty() && password.isNotEmpty()) {
+                        println("E-Mail: $username, Passwort: $password")
+
+                    } else {
+                        println("Bitte geben Sie eine gültige E-Mail und ein Passwort ein.")
+                    }
+                }
+            ).Display()
         }
     }
 }
