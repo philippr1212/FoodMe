@@ -30,7 +30,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import com.example.newfoodme.ui.theme.login.MainActivity
-import com.example.newfoodme.ui.theme.search.SearchPageActivity
+//import com.example.newfoodme.ui.theme.search.SearchPageActivity
 
 
 
@@ -149,12 +149,13 @@ fun Profile(username: String, modifier: Modifier = Modifier) { //Function shows 
                 selected = false,
                 onClick = {} //Navigation to the homepage
             )
-            BottomNavigationItem(
-                icon = { Icon(Icons.Default.Search, contentDescription = "Suche") },
-                label = { Text("Suche") },
-                selected = false,
-                onClick = {context.startActivity(Intent(context, SearchPageActivity::class.java))} //Navigation to the search page
-            )
+
+            //BottomNavigationItem(
+            //icon = { Icon(Icons.Default.Search, contentDescription = "Suche") },
+            //label = { Text("Suche") },
+            //selected = false,
+            //onClick = {context.startActivity(Intent(context, SearchPageActivity::class.java))} //Navigation to the search page
+            //)
             BottomNavigationItem(
                 icon = { Icon(Icons.Default.Person, contentDescription = "Mein Profil") },
                 label = { Text("Mein Profil") },

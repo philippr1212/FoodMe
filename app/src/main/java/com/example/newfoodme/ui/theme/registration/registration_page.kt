@@ -3,7 +3,6 @@ package com.example.newfoodme.ui.theme.registration
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.util.Patterns
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -20,7 +19,6 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.AnnotatedString
-import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.newfoodme.ui.theme.BasicSettings.NewFoodMeTheme
@@ -28,7 +26,6 @@ import com.example.newfoodme.R
 import com.example.newfoodme.ui.theme.classes.CustomTextField
 import com.example.newfoodme.ui.theme.classes.MyButton as MyButton1
 import com.example.newfoodme.ui.theme.login.MainActivity
-
 
 class RegistrationActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -42,11 +39,11 @@ class RegistrationActivity : ComponentActivity() {
     }
 }
 
-//mutableStateof for saving the registration data
 @Composable
 fun RegistrationScreen(modifier: Modifier = Modifier) {
     val context = LocalContext.current
     val sharedPreferences = context.getSharedPreferences("LoginPrefs", Context.MODE_PRIVATE)
+
 
     var vorname by remember { mutableStateOf(sharedPreferences.getString("vorname", "") ?: "") }
     var nachname by remember { mutableStateOf(sharedPreferences.getString("nachname", "") ?: "") }
@@ -54,27 +51,26 @@ fun RegistrationScreen(modifier: Modifier = Modifier) {
     var passwort by remember { mutableStateOf(sharedPreferences.getString("passwort", "") ?: "") }
     var isEmailValid by remember { mutableStateOf(true) }
 
-    //name has to have min. 3 letters
+
     fun isValidName(name: String): Boolean {
         return name.length >= 3
     }
 
-    //password has to have min. 8 letters and 1 digit
+
     fun isValidPassword(password: String): Boolean {
         return password.length >= 8 && password.any { it.isDigit() }
     }
 
-    //validates if and email adress with its compontens is typed in
+
     fun isValidEmail(email: String): Boolean {
         return Patterns.EMAIL_ADDRESS.matcher(email).matches()
     }
 
-    //everything which is build on the website is in the box because its easier to move the entire page elements together instead each element alone
     Box(
         modifier = modifier.fillMaxSize()
     ) {
 
-        //background for registration page
+        // Background image for the registration page
         Image(
             painter = painterResource(id = R.drawable.login_registration_background_dark),
             contentDescription = null,
@@ -82,7 +78,7 @@ fun RegistrationScreen(modifier: Modifier = Modifier) {
             contentScale = ContentScale.Crop
         )
 
-        //foodme logo
+        // FoodMe logo
         Column(
             modifier = Modifier.padding(top = 30.dp),
             horizontalAlignment = Alignment.CenterHorizontally
@@ -93,7 +89,7 @@ fun RegistrationScreen(modifier: Modifier = Modifier) {
             )
         }
 
-        //for the rough positioning of headline, text fields and button
+        // Column for headline, text fields, and button
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -102,7 +98,7 @@ fun RegistrationScreen(modifier: Modifier = Modifier) {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
 
-            //registration headline
+            // Registration headline
             Text(
                 text = "Registrierung",
                 style = MaterialTheme.typography.headlineLarge.copy(fontSize = 38.sp),
@@ -111,38 +107,56 @@ fun RegistrationScreen(modifier: Modifier = Modifier) {
 
             Spacer(modifier = Modifier.height(20.dp))
 
-            //first name textfield
+            // First name text field
             CustomTextField(
                 value = vorname,
-                onValueChange = { vorname = it },
+                onValueChange = { newValue ->
+                    vorname = newValue
+                    with(sharedPreferences.edit()) {
+                        putString("vorname", vorname)
+                        apply()
+                    }
+                },
                 placeholder = "Vorname",
                 modifier = Modifier.fillMaxWidth()
             )
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            //last name textfield
+            // Last name text field
             CustomTextField(
                 value = nachname,
-                onValueChange = { nachname = it },
+                onValueChange = { newValue ->
+                    nachname = newValue
+                    with(sharedPreferences.edit()) {
+                        putString("nachname", nachname)
+                        apply()
+                    }
+                },
                 placeholder = "Nachname",
                 modifier = Modifier.fillMaxWidth()
             )
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            //email address text field
+            // Email address text field
             CustomTextField(
                 value = email,
-                onValueChange = {
-                    email = it
-                    isEmailValid = isValidEmail(it)
+                onValueChange = { newValue ->
+                    email = newValue
+                    isEmailValid = isValidEmail(newValue)
+                    if (isEmailValid) {
+                        with(sharedPreferences.edit()) {
+                            putString("email", email)
+                            apply()
+                        }
+                    }
                 },
                 placeholder = "E-Mail-Adresse",
                 modifier = Modifier.fillMaxWidth()
             )
 
-            //when email adress is not in the correct form the following output appears
+            // Error message if email is not valid
             if (!isEmailValid) {
                 Text(
                     text = "Bitte geben Sie eine gültige E-Mail-Adresse ein.",
@@ -153,18 +167,23 @@ fun RegistrationScreen(modifier: Modifier = Modifier) {
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            //password text field
+            // Password text field
             CustomTextField(
                 value = passwort,
-                onValueChange = { passwort = it },
+                onValueChange = { newValue ->
+                    passwort = newValue
+                    with(sharedPreferences.edit()) {
+                        putString("passwort", passwort)
+                        apply()
+                    }
+                },
                 placeholder = "Passwort",
                 modifier = Modifier.fillMaxWidth()
             )
 
             Spacer(modifier = Modifier.height(16.dp))
 
-
-            //move to login page if you are already registrated
+            // Navigate to login page if already registered
             ClickableText(
                 text = AnnotatedString(
                     "Schon Registriert? Hier geht's zum Login!"
@@ -174,7 +193,7 @@ fun RegistrationScreen(modifier: Modifier = Modifier) {
                     color = Color.White,
                 ),
                 onClick = {
-                    // Navigieren zur Login-Seite
+                    // Navigate to Login page
                     val intent = Intent(context, MainActivity::class.java)
                     context.startActivity(intent)
                 }
@@ -182,15 +201,16 @@ fun RegistrationScreen(modifier: Modifier = Modifier) {
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            //button saves the data in mutableStateOf when you click it
+            // Registration button
             val registerButton = MyButton1(
                 text = "Registrieren",
                 vorname = vorname,
-                //nachname = nachname, überprüfen!!
+                nachname = nachname,
                 username = email,
                 password = passwort,
                 onButtonClick = {
                     if (isEmailValid && isValidName(vorname) && isValidName(nachname) && isValidPassword(passwort)) {
+                        // Daten in SharedPreferences speichern
                         with(sharedPreferences.edit()) {
                             putString("vorname", vorname)
                             putString("nachname", nachname)
@@ -198,10 +218,18 @@ fun RegistrationScreen(modifier: Modifier = Modifier) {
                             putString("passwort", passwort)
                             apply()
                         }
+
+                        // Weiterleitung zu mainactivity
+                        val intent = Intent(context, MainActivity::class.java)
+                        context.startActivity(intent)
+
+                        // Nutzer kann nicht zurücknavigieren
+                        (context as? RegistrationActivity)?.finish()
                     }
                 }
             )
             registerButton.Display()
+
         }
     }
 }

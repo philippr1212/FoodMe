@@ -56,7 +56,8 @@ class MyButton(
     var username: String = "",
     var password: String = "",
     var onButtonClick: () -> Unit = {},
-    vorname: String
+    vorname: String,
+    nachname: String
 ) {
     @Composable
     fun Display() {

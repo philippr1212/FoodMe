@@ -1,12 +1,14 @@
 package com.example.newfoodme.ui.theme.login
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.util.Patterns
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.core.view.WindowCompat
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -22,6 +24,7 @@ import com.example.newfoodme.ui.theme.BasicSettings.NewFoodMeTheme
 import com.example.newfoodme.R
 import com.example.newfoodme.ui.theme.classes.CustomTextField
 import com.example.newfoodme.ui.theme.classes.MyButton
+import com.example.newfoodme.ui.theme.registration.RegistrationActivity
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -30,6 +33,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             NewFoodMeTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+                    // Hier wird das LoginScreen-Layout gerendert
                     LoginScreen(modifier = Modifier.padding(innerPadding))
                 }
             }
@@ -37,7 +41,7 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-//mutableStateof for getting the data which where first saved on the registration page
+// mutableStateOf für die Daten, die zuerst auf der Registrierungsseite gespeichert wurden
 @Composable
 fun LoginScreen(modifier: Modifier = Modifier) {
     val context = LocalContext.current
@@ -52,12 +56,12 @@ fun LoginScreen(modifier: Modifier = Modifier) {
         return Patterns.EMAIL_ADDRESS.matcher(email).matches()
     }
 
-    //everything which is build on the website is in the box because its easier to move the entire page elements together instead each element alone
+    // Alles, was auf der Website gebaut wird, ist in der Box enthalten, weil es einfacher ist, die gesamten Seitenelemente zusammen zu bewegen, anstatt jedes Element einzeln
     Box(
         modifier = modifier.fillMaxSize()
     ) {
 
-        //background for registration page
+        // Hintergrundbild für die Login-Seite
         Image(
             painter = painterResource(id = R.drawable.login_registration_background_dark),
             contentDescription = null,
@@ -65,7 +69,7 @@ fun LoginScreen(modifier: Modifier = Modifier) {
             contentScale = ContentScale.Crop
         )
 
-        //foodme logo
+        // FoodMe-Logo
         Column(
             modifier = Modifier.padding(top = 30.dp),
             horizontalAlignment = Alignment.CenterHorizontally
@@ -76,7 +80,7 @@ fun LoginScreen(modifier: Modifier = Modifier) {
             )
         }
 
-        //for the rough positioning of headline, text fields and button
+        // Grobe Positionierung von Überschrift, Textfeldern und Button
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -85,7 +89,7 @@ fun LoginScreen(modifier: Modifier = Modifier) {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
 
-            //login headline
+            // Login-Überschrift
             Text(
                 text = "Login",
                 style = MaterialTheme.typography.headlineLarge.copy(fontSize = 38.sp),
@@ -94,7 +98,7 @@ fun LoginScreen(modifier: Modifier = Modifier) {
 
             Spacer(modifier = Modifier.height(20.dp))
 
-            //email address text field
+            // E-Mail-Adresse Textfeld
             CustomTextField(
                 value = email,
                 onValueChange = {
@@ -105,7 +109,7 @@ fun LoginScreen(modifier: Modifier = Modifier) {
                 modifier = Modifier.fillMaxWidth()
             )
 
-            //when email adress is not in the correct form the following output appears
+            // Wenn die E-Mail-Adresse nicht im richtigen Format vorliegt, erscheint die folgende Ausgabe
             if (!isEmailValid) {
                 Text(
                     text = "Bitte geben Sie eine gültige E-Mail-Adresse ein.",
@@ -116,21 +120,26 @@ fun LoginScreen(modifier: Modifier = Modifier) {
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            //password text field
+            // Passwort Textfeld
             CustomTextField(
                 value = passwort,
                 onValueChange = { passwort = it },
-                placeholder = "Password",
+                placeholder = "Passwort",
                 modifier = Modifier.fillMaxWidth()
             )
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            //move to login page if you are already registrated
+            // Hinweis für den Benutzer, falls er noch keinen Account hat
             Text(
                 text = "Noch keinen Account? Hier registrieren!",
                 style = MaterialTheme.typography.headlineLarge.copy(fontSize = 18.sp),
-                color = Color.White
+                color = Color.White,
+                modifier = Modifier.clickable {
+                    // Navigiere zur Registrierungsseite
+                    val intent = Intent(context, RegistrationActivity::class.java)
+                    context.startActivity(intent)
+                }
             )
 
             Spacer(modifier = Modifier.height(16.dp))
