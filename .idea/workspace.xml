@@ -22,18 +22,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="6a2268e3-28cf-47c4-91bf-fe2e949f42b0" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/app/src/main/res/values/themes.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/newfoodme/ui/theme/classes/LoginRegistration_classes.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/newfoodme/ui/theme/classes/LoginRegistration_classes.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/newfoodme/ui/theme/login/MainActivity.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/newfoodme/ui/theme/login/MainActivity.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/newfoodme/ui/theme/profil/profil_page.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/newfoodme/ui/theme/profil/profil_page.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/newfoodme/ui/theme/registration/registration_page.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/newfoodme/ui/theme/registration/registration_page.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/drawable/login_registration_background.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/drawable/logo.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/values/loading_background.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/values/main.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/settings.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/settings.gradle.kts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -128,7 +118,7 @@
     "cf.first.check.clang-format": "false",
     "cidr.known.project.marker": "true",
     "dart.analysis.tool.window.visible": "false",
-    "git-widget-placeholder": "Reverting in Philipp",
+    "git-widget-placeholder": "Philipp",
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "C:/Users/phili/Documents/GitHub/FoodMe/app/src/main/res/drawable",
     "project.structure.last.edited": "Modules",
@@ -153,8 +143,8 @@
     </key>
   </component>
   <component name="RunManager">
-    <configuration name="app" type="AndroidRunConfigurationType" factoryName="Android App">
-      <module name="FoodMe.app.main" />
+    <configuration name="app" type="AndroidRunConfigurationType" factoryName="Android App" activateToolWindowBeforeRun="false">
+      <module name="NewFoodMe.app.main" />
       <option name="DEPLOY" value="true" />
       <option name="DEPLOY_APK_FROM_BUNDLE" value="false" />
       <option name="DEPLOY_AS_INSTANT" value="false" />
