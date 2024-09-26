@@ -29,7 +29,6 @@ class ProfileActivity : ComponentActivity() {
         val sharedPreferences = getSharedPreferences("LoginPrefs", Context.MODE_PRIVATE)
         val initialVorname = sharedPreferences.getString("vorname", "") ?: ""
         val initialNachname = sharedPreferences.getString("nachname", "") ?: ""
-        val initialUsername = sharedPreferences.getString("username", "") ?: ""
         val initialPassword = sharedPreferences.getString("password", "") ?: ""
         val initialEmail = sharedPreferences.getString("email", "") ?: ""
 
@@ -41,7 +40,6 @@ class ProfileActivity : ComponentActivity() {
                         Profile(
                             initialVorname = initialVorname,
                             initialNachname = initialNachname,
-                            initialUsername = initialUsername,
                             initialPassword = initialPassword,
                             initialEmail = initialEmail,
                             sharedPreferences = sharedPreferences,
@@ -58,7 +56,6 @@ class ProfileActivity : ComponentActivity() {
 fun Profile(
     initialVorname: String,
     initialNachname: String,
-    initialUsername: String,
     initialPassword: String,
     initialEmail: String,
     sharedPreferences: SharedPreferences,
@@ -67,28 +64,24 @@ fun Profile(
     val context = LocalContext.current
     var vorname by remember { mutableStateOf(initialVorname) }
     var nachname by remember { mutableStateOf(initialNachname) }
-    var username by remember { mutableStateOf(initialUsername) }
     var password by remember { mutableStateOf(initialPassword) }
     var email by remember { mutableStateOf(initialEmail) }
     var isEmailValid by remember { mutableStateOf(true) }
 
     var newVorname by remember { mutableStateOf(initialVorname) }
     var newNachname by remember { mutableStateOf(initialNachname) }
-    var newUsername by remember { mutableStateOf(initialUsername) }
     var newPassword by remember { mutableStateOf(initialPassword) }
     var newEmail by remember { mutableStateOf(initialEmail) }
 
-
     var errorMessage by remember { mutableStateOf("") }
-
+    var successMessage by remember { mutableStateOf("") } 
 
     fun isValidEmail(email: String): Boolean {
         return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()
     }
 
+    //generell site layout settings
     Column(modifier = Modifier.fillMaxSize()) {
-
-        // Beginning of the header
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -101,7 +94,6 @@ fun Profile(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-
                 Text(text = "Guten Tag $vorname $nachname", style = MaterialTheme.typography.h6)
                 Box(
                     modifier = Modifier
@@ -114,6 +106,7 @@ fun Profile(
             }
         }
 
+
         Column(
             modifier = Modifier
                 .weight(1f)
@@ -121,42 +114,31 @@ fun Profile(
                 .background(Color.White)
                 .padding(16.dp)
         ) {
-
-
             Text(
                 text = "Personenbezogene Daten",
-                style = MaterialTheme.typography.h5.copy(fontWeight = FontWeight.Bold)
+                style = MaterialTheme.typography.h5.copy(fontWeight = FontWeight.Bold),
+                modifier = Modifier.padding(horizontal = 16.dp)
             )
 
             Spacer(modifier = Modifier.height(16.dp))
 
-
-            if (errorMessage.isNotEmpty()) {
-                Text(
-                    text = errorMessage,
-                    color = Color.Red,
-                    modifier = Modifier.padding(16.dp)
-                )
-            }
-
             CustomTextField(
                 value = newVorname,
-                onValueChange = { newValue ->
-                    newVorname = newValue
-                },
+                onValueChange = { newVorname = it },
                 placeholder = "Vorname",
                 modifier = Modifier.fillMaxWidth().padding(16.dp)
             )
 
+            Spacer(modifier = Modifier.height(16.dp))
 
             CustomTextField(
                 value = newNachname,
-                onValueChange = { newValue ->
-                    newNachname = newValue
-                },
+                onValueChange = { newNachname = it },
                 placeholder = "Nachname",
                 modifier = Modifier.fillMaxWidth().padding(16.dp)
             )
+
+            Spacer(modifier = Modifier.height(16.dp))
 
             CustomTextField(
                 value = newEmail,
@@ -168,53 +150,44 @@ fun Profile(
                 modifier = Modifier.fillMaxWidth().padding(16.dp)
             )
 
-            // Wenn die E-Mail-Adresse nicht im richtigen Format vorliegt, erscheint die folgende Ausgabe
-            if (!isEmailValid) {
-                Text(
-                    text = "Bitte geben Sie eine gültige E-Mail-Adresse ein.",
-                    color = Color.Red,
-                    style = MaterialTheme.typography.body1,
-                    fontSize = 12.sp,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(top = 4.dp) // Weniger Abstand zum oberen Textfeld
-                        .align(Alignment.CenterHorizontally) // Zentrieren des Textes
-                )
-            }
-
+            Spacer(modifier = Modifier.height(16.dp))
 
             CustomTextField(
                 value = newPassword,
-                onValueChange = { newValue ->
-                    newPassword = newValue
-                },
+                onValueChange = { newPassword = it },
                 placeholder = "Passwort",
                 modifier = Modifier.fillMaxWidth().padding(16.dp)
             )
 
-            // Button for updating the changes
+            // Button to change the new data
             Button(
                 onClick = {
-                    if (newVorname.isNotBlank() && newNachname.isNotBlank() && newUsername.isNotBlank() && newPassword.isNotBlank() && isEmailValid) {
 
-                        vorname = newVorname
-                        nachname = newNachname
-                        username = newUsername
-                        password = newPassword
-                        email = newEmail
-                        with(sharedPreferences.edit()) {
-                            putString("vorname", vorname)
-                            putString("nachname", nachname)
-                            putString("username", username)
-                            putString("password", password)
-                            putString("email", email)
-                            apply()
+                    //checks if all fields are filled out correctly
+                    when {
+                        newVorname.isBlank() || newNachname.isBlank() || newPassword.isBlank() -> {
+                            errorMessage = "Bitte füllen Sie alle Eingabefelder aus."
+                            successMessage = ""
                         }
-
-                        errorMessage = ""
-                    } else {
-                        // display error message
-                        errorMessage = "Bitte füllen Sie alle Eingabefelder aus."
+                        !isEmailValid -> {
+                            errorMessage = "Bitte geben Sie eine gültige E-Mail-Adresse ein."
+                            successMessage = ""
+                        }
+                        else -> {
+                            vorname = newVorname
+                            nachname = newNachname
+                            password = newPassword
+                            email = newEmail
+                            with(sharedPreferences.edit()) {
+                                putString("vorname", vorname)
+                                putString("nachname", nachname)
+                                putString("password", password)
+                                putString("email", email)
+                                apply()
+                            }
+                            errorMessage = ""
+                            successMessage = "Daten wurden erfolgreich geändert."
+                        }
                     }
                 },
                 modifier = Modifier
@@ -224,9 +197,38 @@ fun Profile(
             ) {
                 Text(text = "Ändern", color = Color.White)
             }
+
+            //common box for error message and success message
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(8.dp),
+                contentAlignment = Alignment.Center
+            ) {
+                when {
+                    errorMessage.isNotEmpty() -> {
+                        Text(
+                            text = errorMessage,
+                            color = Color.Red,  //error message in red
+                            fontSize = 12.sp,
+                            fontWeight = FontWeight.Bold,
+                            style = MaterialTheme.typography.body1,
+                        )
+                    }
+                    successMessage.isNotEmpty() -> {
+                        Text(
+                            text = successMessage,
+                            color = Color.Green,  //error message in green
+                            fontSize = 12.sp,
+                            fontWeight = FontWeight.Bold,
+                            style = MaterialTheme.typography.body1,
+                        )
+                    }
+                }
+            }
         }
 
-        // Footer with the bottom navigation
+        // Bottom Navigation Bar
         BottomNavigation(
             backgroundColor = Color(0xFFFFA500)
         ) {

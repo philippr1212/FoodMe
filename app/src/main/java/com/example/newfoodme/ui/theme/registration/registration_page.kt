@@ -211,7 +211,6 @@ fun RegistrationScreen(modifier: Modifier = Modifier) {
                 username = username,
                 password = password,
                 onButtonClick = { vorname, nachname, username, password ->
-                    // Hier kannst du die Registrierungslogik implementieren
                     println("Vorname: $vorname, Nachname: $nachname, E-Mail: $username, Passwort: $password")
                 }
             ).Display()

@@ -13,19 +13,25 @@
         android:theme="@style/Theme.NewFoodMe"
         tools:targetApi="31">
 
+        <!-- Google API-Schlüssel -->
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyCVnbT4XT391c0WfRyy-jnr7q3BPSbwTOM" />
+
         <!-- Startaktivität festlegen -->
         <activity
-            android:name="com.example.newfoodme.ui.theme.peopleData.ProfileActivity"
+            android:name="com.example.newfoodme.ui.theme.restaurantSite.ProfileActivity"
             android:exported="true"
             android:label="@string/app_name"
-            android:theme="@style/Theme.NewFoodMe">
+            android:theme="@style/Theme.NewFoodMe"
+            tools:ignore="MissingClass">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
 
-        <!-- MainActivity hinzufügen -->
+        <!-- Andere Activities -->
         <activity
             android:name="com.example.newfoodme.ui.theme.login.MainActivity"
             android:exported="true"
@@ -35,4 +41,3 @@
 
     </application>
 </manifest>
-

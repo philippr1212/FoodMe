@@ -72,7 +72,7 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
-    implementation(libs.androidx.material.icons.core)
+    //implementation(libs.androidx.material.icons.core)
 }
 
 dependencies {
@@ -106,4 +106,12 @@ dependencies {
     // Debugging
     debugImplementation("androidx.compose.ui:ui-tooling:1.5.1")
     debugImplementation("androidx.compose.ui:ui-test-manifest:1.5.1")
+}
+
+dependencies {
+    // Für Coil
+    implementation("io.coil-kt:coil-compose:2.2.2")
+
+    // Für Google Places API
+    implementation("com.google.android.libraries.places:places:2.6.0")
 }
