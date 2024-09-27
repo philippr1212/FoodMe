@@ -1,6 +1,11 @@
-<?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.example.newfoodme">
+
+    <!-- Standort-Berechtigungen -->
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
     <application
         android:allowBackup="true"
@@ -13,31 +18,50 @@
         android:theme="@style/Theme.NewFoodMe"
         tools:targetApi="31">
 
-        <!-- Google API-Schlüssel -->
+        <!-- Google Places API-Schlüssel -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyCVnbT4XT391c0WfRyy-jnr7q3BPSbwTOM" />
+            android:value="AIzaSyAa4-7RWEZvNyA-97dcz_6fKbPjfRJU8xI"/>
 
-        <!-- Startaktivität festlegen -->
+        <!-- HomePageActivity hinzufügen -->
         <activity
-            android:name="com.example.newfoodme.ui.theme.restaurantSite.ProfileActivity"
+            android:name=".ui.theme.home.HomePageActivity"
             android:exported="true"
             android:label="@string/app_name"
-            android:theme="@style/Theme.NewFoodMe"
-            tools:ignore="MissingClass">
+            android:theme="@style/Theme.NewFoodMe">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
 
-        <!-- Andere Activities -->
+        <!-- ProfileActivity hinzufügen -->
         <activity
-            android:name="com.example.newfoodme.ui.theme.login.MainActivity"
+            android:name=".ui.theme.profil.ProfileActivity"
             android:exported="true"
             android:label="@string/app_name"
-            android:theme="@style/Theme.NewFoodMe">
+            android:theme="@style/Theme.NewFoodMe" />
+
+        <!-- SearchPageActivity hinzufügen -->
+        <activity
+            android:name=".ui.theme.search.SearchPageActivity"
+            android:exported="true"
+            android:label="@string/app_name"
+            android:theme="@style/Theme.NewFoodMe" >
+            <!-- Intent-Filter zum Empfangen von Daten von der InfoWindow -->
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
         </activity>
 
+        <!-- MainActivity hinzufügen -->
+        <activity
+            android:name=".ui.theme.login.MainActivity"
+            android:exported="true"
+            android:label="@string/app_name"
+            android:theme="@style/Theme.NewFoodMe" />
+
     </application>
+
 </manifest>
