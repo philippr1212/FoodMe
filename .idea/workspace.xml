@@ -23,8 +23,7 @@
   <component name="ChangeListManager">
     <list default="true" id="6a2268e3-28cf-47c4-91bf-fe2e949f42b0" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/newfoodme/ui/theme/profil/profil_page.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/newfoodme/ui/theme/profil/profil_page.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/newfoodme/ui/theme/search/search_page.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/newfoodme/ui/theme/search/search_page.kt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

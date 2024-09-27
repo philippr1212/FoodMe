@@ -447,8 +447,8 @@ fun SearchScreen(
     var selectedPaymentMethod by remember { mutableStateOf<String?>(null) } // stores the selected payment method
 
     // reservation details
-    var selectedTime by remember { mutableStateOf("18:00") } // Stores the selected time for the reservation and 18:00 is the standard time which is choosen beforehand
-    var selectedDate by remember { mutableStateOf("Heute") } //stores the selected date for the reservation and "heute" is the standard date which is choosen beforehand
+    var selectedTime by remember { mutableStateOf("") } // Stores the selected time for the reservation and 18:00 is the standard time which is choosen beforehand
+    var selectedDate by remember { mutableStateOf("") } //stores the selected date for the reservation and "heute" is the standard date which is choosen beforehand
     var numberOfPersons by remember { mutableStateOf(1) } // stores the number of people for the reservation
     var resultMessage by remember { mutableStateOf<String?>(null) } // stores the message to be shown in the result dialog
     var resultTextColor by remember { mutableStateOf(Color.Black) } // stores the color of the result text
