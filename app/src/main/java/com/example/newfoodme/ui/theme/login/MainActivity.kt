@@ -41,7 +41,7 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-// mutableStateOf für die Daten, die zuerst auf der Registrierungsseite gespeichert wurden
+// mutableStateOf for the data first saved on the registration page
 @Composable
 fun LoginScreen(modifier: Modifier = Modifier) {
     val context = LocalContext.current
@@ -51,17 +51,17 @@ fun LoginScreen(modifier: Modifier = Modifier) {
     var passwort by remember { mutableStateOf(sharedPreferences.getString("passwort", "") ?: "") }
     var isEmailValid by remember { mutableStateOf(true) }
 
-    // Prüft, ob im Eingabefeld eine gültige E-Mail-Adresse vorliegt
+    //Checks whether there is a valid email address in the input field
     fun isValidEmail(email: String): Boolean {
         return Patterns.EMAIL_ADDRESS.matcher(email).matches()
     }
 
-    // Alles, was auf der Website gebaut wird, ist in der Box enthalten, weil es einfacher ist, die gesamten Seitenelemente zusammen zu bewegen, anstatt jedes Element einzeln
+    // Everything that is built on the website is included in the box because it is easier to move the entire page elements together rather than each element individually
     Box(
         modifier = modifier.fillMaxSize()
     ) {
 
-        // Hintergrundbild für die Login-Seite
+        //Background image for the login page
         Image(
             painter = painterResource(id = R.drawable.login_registration_background_dark),
             contentDescription = null,
@@ -80,7 +80,7 @@ fun LoginScreen(modifier: Modifier = Modifier) {
             )
         }
 
-        // Grobe Positionierung von Überschrift, Textfeldern und Button
+        // Rough positioning of heading, text fields and buttons
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -89,7 +89,7 @@ fun LoginScreen(modifier: Modifier = Modifier) {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
 
-            // Login-Überschrift
+            // Login-Headline
             Text(
                 text = "Login",
                 style = MaterialTheme.typography.headlineLarge.copy(fontSize = 38.sp),
@@ -98,7 +98,7 @@ fun LoginScreen(modifier: Modifier = Modifier) {
 
             Spacer(modifier = Modifier.height(20.dp))
 
-            // E-Mail-Adresse Textfeld
+            // Email address text field
             CustomTextField(
                 value = email,
                 onValueChange = {
@@ -109,7 +109,7 @@ fun LoginScreen(modifier: Modifier = Modifier) {
                 modifier = Modifier.fillMaxWidth()
             )
 
-            // Wenn die E-Mail-Adresse nicht im richtigen Format vorliegt, erscheint die folgende Ausgabe
+            // If the email address is not in the correct format, the following output will appear
             if (!isEmailValid) {
                 Text(
                     text = "Bitte geben Sie eine gültige E-Mail-Adresse ein.",
@@ -120,7 +120,7 @@ fun LoginScreen(modifier: Modifier = Modifier) {
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            // Passwort Textfeld
+            // Passwort Textfield
             CustomTextField(
                 value = passwort,
                 onValueChange = { passwort = it },
@@ -130,13 +130,13 @@ fun LoginScreen(modifier: Modifier = Modifier) {
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            // Hinweis für den Benutzer, falls er noch keinen Account hat
+            // Note for the user if he does not yet have an account
             Text(
                 text = "Noch keinen Account? Hier registrieren!",
                 style = MaterialTheme.typography.headlineLarge.copy(fontSize = 18.sp),
                 color = Color.White,
                 modifier = Modifier.clickable {
-                    // Navigiere zur Registrierungsseite
+                    //Navigate to the registration page
                     val intent = Intent(context, RegistrationActivity::class.java)
                     context.startActivity(intent)
                 }
@@ -153,6 +153,7 @@ fun LoginScreen(modifier: Modifier = Modifier) {
                 password = password,
                 onButtonClick = { _, _, username, password ->
 
+                    // Checks if email address and password is typed in
                     if (username.isNotEmpty() && password.isNotEmpty()) {
                         println("E-Mail: $username, Passwort: $password")
 
