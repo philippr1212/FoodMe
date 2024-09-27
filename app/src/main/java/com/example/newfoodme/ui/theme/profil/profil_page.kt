@@ -1,6 +1,6 @@
 package com.example.newfoodme.ui.theme.profil
 
-//Import of different android and compose (libraries)
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -9,56 +9,55 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Scaffold
-import androidx.compose.material.Text
-import androidx.compose.material.Button
-import androidx.compose.material.BottomNavigation
-import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
-import androidx.compose.material.icons.filled.Public
-import androidx.compose.material.icons.filled.GpsFixed
-import androidx.compose.material.icons.filled.Language
-import androidx.compose.material.icons.filled.Gavel
-import androidx.compose.material.icons.filled.Description
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.platform.LocalContext
 import com.example.newfoodme.ui.theme.login.MainActivity
 import com.example.newfoodme.ui.theme.search.SearchPageActivity
 import com.example.newfoodme.ui.theme.home.HomePageActivity
 
-
-
-//Creating class "ProfileActivity"
-class ProfileActivity : ComponentActivity() { //ProfileActivity as a container for compose based UI
-    override fun onCreate(savedInstanceState: Bundle?) { //Method starts with the Start of the Activity
+class ProfileActivity : ComponentActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContent { //Activity gets set
-            MaterialTheme {//Layout
-                Scaffold( //Layout
+
+        //query the stored values for norname and last name
+        val sharedPreferences = getSharedPreferences("LoginPrefs", Context.MODE_PRIVATE)
+        val initialVorname = sharedPreferences.getString("vorname", "") ?: ""
+        val initialNachname = sharedPreferences.getString("nachname", "") ?: ""
+
+        setContent {
+            MaterialTheme {
+                Scaffold(
                     modifier = Modifier.fillMaxSize(),
                     content = { innerPadding ->
-                        Profile(username = "Benutzername", modifier = Modifier.padding(innerPadding)) //Main element of the UI
+                        Profile(
+                            vorname = initialVorname,
+                            nachname = initialNachname,
+                            modifier = Modifier.padding(innerPadding)
+                        )
                     }
                 )
             }
         }
     }
 }
-//Creating composable (function) "Profile"
+
+// Creating composable (function) "Profile"
 @Composable
-fun Profile(username: String, modifier: Modifier = Modifier) { //Function shows the profile page of the user
+fun Profile(vorname: String, nachname: String, modifier: Modifier = Modifier) {
     val context = LocalContext.current
+
     Column(modifier = Modifier.fillMaxSize()) {
 
-
-        // Beginning of the header
+        // Header
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -71,19 +70,19 @@ fun Profile(username: String, modifier: Modifier = Modifier) { //Function shows 
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                Text(text = "Guten Tag \"$username\"", style = MaterialTheme.typography.h6)
+                Text(text = "Guten Tag $vorname $nachname", style = MaterialTheme.typography.h6)
                 Box(
                     modifier = Modifier
                         .size(40.dp)
                         .background(Color(0xFFBDBDBD), shape = CircleShape),
                     contentAlignment = Alignment.Center
                 ) {
-                    Text(text = "B", style = MaterialTheme.typography.body1)
+                    Text(text = vorname.firstOrNull()?.toString() ?: "", style = MaterialTheme.typography.body1)
                 }
             }
         }
 
-        // Beginning of the main part
+        // Main part
         Column(
             modifier = Modifier
                 .weight(1f)
@@ -125,12 +124,12 @@ fun Profile(username: String, modifier: Modifier = Modifier) { //Function shows 
             ProfileItem(icon = Icons.Default.Description, title = "AGB")
         }
 
-        // Button for logout
+        // Logout Button
         Button(
             onClick = {
                 val intent = Intent(context, MainActivity::class.java)
                 intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                context.startActivity(intent) //After clicking on the button the user is redirected to the next login page
+                context.startActivity(intent)
             },
             modifier = Modifier
                 .fillMaxWidth()
@@ -140,7 +139,7 @@ fun Profile(username: String, modifier: Modifier = Modifier) { //Function shows 
             Text(text = "Abmelden", color = Color.White)
         }
 
-        // Beginning of the footer with the bottom navigation
+        // Footer mit der Bottom Navigation
         BottomNavigation(
             backgroundColor = Color(0xFFFFA500)
         ) {
@@ -148,13 +147,13 @@ fun Profile(username: String, modifier: Modifier = Modifier) { //Function shows 
                 icon = { Icon(Icons.Default.Home, contentDescription = "Entdecke") },
                 label = { Text("Entdecke") },
                 selected = false,
-                onClick = {context.startActivity(Intent(context, HomePageActivity::class.java))}
+                onClick = { context.startActivity(Intent(context, HomePageActivity::class.java)) }
             )
             BottomNavigationItem(
                 icon = { Icon(Icons.Default.Search, contentDescription = "Suche") },
                 label = { Text("Suche") },
                 selected = false,
-                onClick = {context.startActivity(Intent(context, SearchPageActivity::class.java))} //Navigation to the search page
+                onClick = { context.startActivity(Intent(context, SearchPageActivity::class.java)) }
             )
             BottomNavigationItem(
                 icon = { Icon(Icons.Default.Person, contentDescription = "Mein Profil") },
@@ -165,7 +164,7 @@ fun Profile(username: String, modifier: Modifier = Modifier) { //Function shows 
         }
     }
 }
-//Creating composable (function) "ProfileItem"
+
 @Composable
 fun ProfileItem(icon: ImageVector, title: String) {
     Row(
@@ -182,5 +181,4 @@ fun ProfileItem(icon: ImageVector, title: String) {
         Spacer(modifier = Modifier.width(16.dp))
         Text(text = title, style = MaterialTheme.typography.body1)
     }
-
 }
