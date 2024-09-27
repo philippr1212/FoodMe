@@ -44,7 +44,7 @@
         <!-- MainActivity hinzufügen -->
 
         <activity
-            android:name=".ui.theme.login.MainActivity"
+            android:name=".ui.theme.peopleData.ProfileActivity"
             android:exported="true"
             android:theme="@style/Theme.NewFoodMe" >
             <intent-filter>
