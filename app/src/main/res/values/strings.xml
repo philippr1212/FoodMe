@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">NewFoodMe</string>
+    <string name="title">Title</string>
+    <string name="snippet">Snippet</string>
+    <string name="info">Info</string>
+    <string name="infos">INFO</string>
 </resources>

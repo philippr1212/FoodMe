@@ -1,6 +1,6 @@
 package com.example.newfoodme.ui.theme.profil
 
-//Import of different  android and compose (libraries)
+//Import of different android and compose (libraries)
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -31,6 +31,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import com.example.newfoodme.ui.theme.login.MainActivity
 import com.example.newfoodme.ui.theme.search.SearchPageActivity
+import com.example.newfoodme.ui.theme.home.HomePageActivity
 
 
 
@@ -147,7 +148,7 @@ fun Profile(username: String, modifier: Modifier = Modifier) { //Function shows 
                 icon = { Icon(Icons.Default.Home, contentDescription = "Entdecke") },
                 label = { Text("Entdecke") },
                 selected = false,
-                onClick = {} //Navigation to the homepage
+                onClick = {context.startActivity(Intent(context, HomePageActivity::class.java))}
             )
             BottomNavigationItem(
                 icon = { Icon(Icons.Default.Search, contentDescription = "Suche") },
