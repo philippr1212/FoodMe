@@ -27,26 +27,36 @@
         <activity
             android:name=".ui.theme.home.HomePageActivity"
             android:exported="true"
-            android:label="@string/app_name"
             android:theme="@style/Theme.NewFoodMe">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
 
         <!-- ProfileActivity hinzufügen -->
         <activity
             android:name=".ui.theme.profil.ProfileActivity"
             android:exported="true"
-            android:label="@string/app_name"
             android:theme="@style/Theme.NewFoodMe" />
+
+        <!-- ProfileActivity hinzufügen -->
+        <activity
+            android:name=".ui.theme.registration.RegistrationActivity"
+            android:exported="true"
+            android:theme="@style/Theme.NewFoodMe" />
+        <!-- MainActivity hinzufügen -->
+
+        <activity
+            android:name=".ui.theme.login.MainActivity"
+            android:exported="true"
+            android:theme="@style/Theme.NewFoodMe" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
 
         <!-- SearchPageActivity hinzufügen -->
         <activity
             android:name=".ui.theme.search.SearchPageActivity"
             android:exported="true"
-            android:label="@string/app_name"
             android:theme="@style/Theme.NewFoodMe" >
             <!-- Intent-Filter zum Empfangen von Daten von der InfoWindow -->
             <intent-filter>
@@ -55,12 +65,6 @@
             </intent-filter>
         </activity>
 
-        <!-- MainActivity hinzufügen -->
-        <activity
-            android:name=".ui.theme.login.MainActivity"
-            android:exported="true"
-            android:label="@string/app_name"
-            android:theme="@style/Theme.NewFoodMe" />
 
     </application>
 

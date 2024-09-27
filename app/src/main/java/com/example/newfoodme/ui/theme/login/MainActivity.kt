@@ -25,6 +25,8 @@ import com.example.newfoodme.R
 import com.example.newfoodme.ui.theme.classes.CustomTextField
 import com.example.newfoodme.ui.theme.classes.MyButton
 import com.example.newfoodme.ui.theme.registration.RegistrationActivity
+import com.example.newfoodme.ui.theme.home.HomePageActivity
+
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -51,17 +53,13 @@ fun LoginScreen(modifier: Modifier = Modifier) {
     var passwort by remember { mutableStateOf(sharedPreferences.getString("passwort", "") ?: "") }
     var isEmailValid by remember { mutableStateOf(true) }
 
-    //Checks whether there is a valid email address in the input field
     fun isValidEmail(email: String): Boolean {
         return Patterns.EMAIL_ADDRESS.matcher(email).matches()
     }
 
-    // Everything that is built on the website is included in the box because it is easier to move the entire page elements together rather than each element individually
     Box(
         modifier = modifier.fillMaxSize()
     ) {
-
-        //Background image for the login page
         Image(
             painter = painterResource(id = R.drawable.login_registration_background_dark),
             contentDescription = null,
@@ -69,7 +67,6 @@ fun LoginScreen(modifier: Modifier = Modifier) {
             contentScale = ContentScale.Crop
         )
 
-        // FoodMe-Logo
         Column(
             modifier = Modifier.padding(top = 30.dp),
             horizontalAlignment = Alignment.CenterHorizontally
@@ -80,7 +77,6 @@ fun LoginScreen(modifier: Modifier = Modifier) {
             )
         }
 
-        // Rough positioning of heading, text fields and buttons
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -89,7 +85,6 @@ fun LoginScreen(modifier: Modifier = Modifier) {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
 
-            // Login-Headline
             Text(
                 text = "Login",
                 style = MaterialTheme.typography.headlineLarge.copy(fontSize = 38.sp),
@@ -98,7 +93,6 @@ fun LoginScreen(modifier: Modifier = Modifier) {
 
             Spacer(modifier = Modifier.height(20.dp))
 
-            // Email address text field
             CustomTextField(
                 value = email,
                 onValueChange = {
@@ -109,7 +103,6 @@ fun LoginScreen(modifier: Modifier = Modifier) {
                 modifier = Modifier.fillMaxWidth()
             )
 
-            // If the email address is not in the correct format, the following output will appear
             if (!isEmailValid) {
                 Text(
                     text = "Bitte geben Sie eine gültige E-Mail-Adresse ein.",
@@ -120,7 +113,6 @@ fun LoginScreen(modifier: Modifier = Modifier) {
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            // Passwort Textfield
             CustomTextField(
                 value = passwort,
                 onValueChange = { passwort = it },
@@ -130,13 +122,11 @@ fun LoginScreen(modifier: Modifier = Modifier) {
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            // Note for the user if he does not yet have an account
             Text(
                 text = "Noch keinen Account? Hier registrieren!",
                 style = MaterialTheme.typography.headlineLarge.copy(fontSize = 18.sp),
                 color = Color.White,
                 modifier = Modifier.clickable {
-                    //Navigate to the registration page
                     val intent = Intent(context, RegistrationActivity::class.java)
                     context.startActivity(intent)
                 }
@@ -144,19 +134,17 @@ fun LoginScreen(modifier: Modifier = Modifier) {
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            // Login-Button
-            val username = ""
-            val password = ""
             MyButton(
                 text = "Login",
-                username = username,
-                password = password,
+                username = email,
+                password = passwort,
                 onButtonClick = { _, _, username, password ->
-
-                    // Checks if email address and password is typed in
                     if (username.isNotEmpty() && password.isNotEmpty()) {
                         println("E-Mail: $username, Passwort: $password")
 
+                        // Navigate to HomePageActivity
+                        val intent = Intent(context, HomePageActivity::class.java)
+                        context.startActivity(intent)
                     } else {
                         println("Bitte geben Sie eine gültige E-Mail und ein Passwort ein.")
                     }
@@ -165,3 +153,4 @@ fun LoginScreen(modifier: Modifier = Modifier) {
         }
     }
 }
+

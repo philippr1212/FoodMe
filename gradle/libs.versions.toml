@@ -1,6 +1,6 @@
 [versions]
 activitycompose = "1.9.1"
-agp = "8.5.2"
+agp = "8.5.1"
 androidxtest = "1.6.2"
 compose-bom = "2024.08.00"
 converterGson = "2.9.0"
