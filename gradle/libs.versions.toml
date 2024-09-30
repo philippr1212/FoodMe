@@ -1,88 +1,97 @@
 [versions]
-activitycompose = "1.9.1"
-agp = "8.4.0"
-androidxtest = "1.6.2"
-compose-bom = "2024.08.00"
+activityComposeVersion = "1.9.2"
+agp = "8.5.2"
+compose-bom = "2024.09.02"
 converterGson = "2.9.0"
-dokka = "1.9.20"
-espresso = "3.6.1"
-fragment = "1.6.0"
-gradle = "8.1.4"
-jacoco-plugin = "0.2.1"
-junitktx = "1.2.1"
+foundation = "1.7.2"
+fragment = "1.8.3"
+fragmentKtx = "1.8.3"
+googlePlaces = "latest_version"
 junit = "4.13.2"
 kotlin = "2.0.0"
-kotlinxCoroutines = "1.8.1"
-loggingInterceptor = "5.0.0"
+kotlinxCoroutinesPlayServices = "1.8.1"
+mapsCompose = "6.1.0"
+mapsUtilsKtx = "2.2.0"
 material = "1.12.0"
-mapsktx = "5.1.1"
-mapsecrets = "2.0.1"
-org-jacoco-core = "0.8.11"
+materialIconsExtended = "1.7.2"
+materialVersion = "1.7.2"
 androidx-core = "1.13.1"
-androidx-lifecycle-runtime = "2.8.4"
-activity-compose = "1.9.1"
-androidx-ui = "1.6.8"
-androidx-ui-graphics = "1.6.8"
-androidx-ui-tooling-preview = "1.6.8"
-androidx-material3 = "1.2.1"
+androidx-lifecycle-runtime = "2.8.6"
+activity-compose = "1.9.2"
+androidx-ui = "1.7.2"
+androidx-ui-graphics = "1.7.2"
+androidx-ui-tooling-preview = "1.7.2"
+androidx-material3 = "1.3.0"
 androidx-appcompat = "1.7.0"
-androidx-activity = "1.9.1"
+androidx-activity = "1.9.2"
 androidx-constraintlayout = "2.1.4"
-androidx-navigation-runtime = "2.7.7"
-androidx-navigation-compose = "2.7.7"
+androidx-navigation-runtime = "2.8.1"
+androidx-navigation-compose = "2.8.1"
 androidx-junit = "1.2.1"
 androidx-espresso-core = "3.6.1"
-androidx-ui-test-junit4 = "1.6.8"
-androidx-ui-tooling = "1.6.8"
-androidx-ui-test-manifest = "1.6.8"
+androidx-ui-test-junit4 = "1.7.2"
+androidx-ui-tooling = "1.7.2"
+androidx-ui-test-manifest = "1.7.2"
 google-maps-sdk = "19.0.0"
 google-location-sdk = "21.3.0"
-maps-compose = "6.1.0"
-compose = "1.6.8"
-material3 = "1.2.1"
-places = "3.5.0"
-playServicesLocation = "21.0.1"
+compose = "1.7.2"
+material3 = "1.3.0"
+places = "4.0.0"
+placesVersion = "4.0.0"
+playServicesLocation = "21.3.0"
+playServicesMaps = "19.0.0"
 retrofit = "2.9.0"
+ui = "1.7.2"
+uiToolingPreview = "1.7.2"
+uiTooling = "1.7.2"
+uiVersion = "1.7.2"
 
 [libraries]
-android-gradle-plugin = { group = "com.android.tools.build", name = "gradle", version.ref = "agp" }
-androidx-compose-activity = { group = "androidx.activity", name = "activity-compose", version.ref = "activitycompose" }
+#noinspection SimilarGradleDependency
+androidx-activity-compose-v180 = { module = "androidx.activity:activity-compose", version.ref = "activityComposeVersion" }
 androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "compose-bom" }
-androidx-compose-foundation = { group = "androidx.compose.foundation", name = "foundation" }
 androidx-compose-material = { group = "androidx.compose.material", name = "material" }
 androidx-compose-ui = { group = "androidx.compose.ui", name = "ui" }
-androidx-compose-ui-preview-tooling = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
-androidx-compose-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
-androidx-core = { group = "androidx.core", name = "core-ktx", version.ref = "androidx-core" }
+androidx-foundation = { module = "androidx.compose.foundation:foundation", version.ref = "foundation" }
 androidx-fragment = { module = "androidx.fragment:fragment", version.ref = "fragment" }
-androidx-test-compose-ui = { group = "androidx.compose.ui", name = "ui-test-junit4" }
-androidx-test-core = { group = "androidx.test", name = "core", version.ref = "androidxtest" }
-androidx-test-espresso = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espresso" }
-androidx-test-junit-ktx = { group = "androidx.test.ext", name = "junit-ktx", version.ref = "junitktx" }
-androidx-test-rules = { group = "androidx.test", name = "rules", version.ref = "androidxtest" }
-androidx-test-runner = { group = "androidx.test", name = "runner", version.ref = "androidxtest" }
+androidx-fragment-ktx = { module = "androidx.fragment:fragment-ktx", version.ref = "fragmentKtx" }
+androidx-material = { module = "androidx.compose.material:material", version.ref = "materialVersion" }
+#noinspection SimilarGradleDependency
+androidx-material-icons-extended-v150 = { module = "androidx.compose.material:material-icons-extended", version.ref = "materialIconsExtended" }
+#noinspection SimilarGradleDependency
+androidx-ui-tooling-v150 = { module = "androidx.compose.ui:ui-tooling", version.ref = "uiTooling" }
+#noinspection SimilarGradleDependency
+androidx-ui-tooling-preview-v150 = { module = "androidx.compose.ui:ui-tooling-preview", version.ref = "uiToolingPreview" }
+#noinspection SimilarGradleDependency
+androidx-ui-v100 = { module = "androidx.compose.ui:ui", version.ref = "uiVersion" }
+#noinspection SimilarGradleDependency
+androidx-ui-v150 = { module = "androidx.compose.ui:ui", version.ref = "ui" }
 converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "converterGson" }
-dokka-plugin = { group = "org.jetbrains.dokka", name = "dokka-gradle-plugin", version.ref = "dokka" }
-gradle-v810 = { module = "com.android.tools.build:gradle", version.ref = "gradle" }
-jacoco-android-plugin = { group = "com.mxalbert.gradle", name = "jacoco-android", version.ref = "jacoco-plugin", version.require = "0.2.1" }
-kotlin = { group = "org.jetbrains.kotlin", name = "kotlin-stdlib-jdk7", version.ref = "kotlin" }
-kotlin-gradle-plugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin" }
-kotlinx-coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "kotlinxCoroutines" }
-kotlinx-coroutines-android = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "kotlinxCoroutines" }
-logging-interceptor = { module = "com.squareup.okhttp3:logging-interceptor", version.ref = "loggingInterceptor" }
-maps-ktx-std = { group = "com.google.maps.android", name = "maps-ktx", version.ref = "mapsktx" }
-maps-ktx-utils = { group = "com.google.maps.android", name = "maps-utils-ktx", version.ref = "mapsktx" }
-maps-secrets-plugin = { group = "com.google.android.libraries.mapsplatform.secrets-gradle-plugin", name = "secrets-gradle-plugin", version.ref = "mapsecrets" }
-org-jacoco-core = { group = "org.jacoco", name = "org.jacoco.core", version.ref = "org-jacoco-core" }
+kotlinx-coroutines-play-services = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-play-services", version.ref = "kotlinxCoroutinesPlayServices" }
+#noinspection SimilarGradleDependency
+maps-compose-v2113 = { module = "com.google.maps.android:maps-compose", version.ref = "mapsCompose" }
+maps-utils-ktx-v220 = { module = "com.google.maps.android:maps-utils-ktx", version.ref = "mapsUtilsKtx" }
+#noinspection SimilarGradleDependency
+places-v310 = { module = "com.google.android.libraries.places:places", version.ref = "placesVersion" }
+#noinspection SimilarGradleDependency
+places-vlatestversion = { module = "com.google.android.libraries.places:places", version.ref = "googlePlaces" }
+#noinspection SimilarGradleDependency
 play-services-location-v2101 = { module = "com.google.android.gms:play-services-location", version.ref = "playServicesLocation" }
+#noinspection SimilarGradleDependency
+play-services-maps-v1810 = { module = "com.google.android.gms:play-services-maps", version.ref = "playServicesMaps" }
 retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
-test-junit = { group = "junit", name = "junit", version.ref = "junit" }
+#noinspection SimilarGradleDependency
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "androidx-core" }
 androidx-lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "androidx-lifecycle-runtime" }
+#noinspection SimilarGradleDependency
 androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "activity-compose" }
+#noinspection SimilarGradleDependency
 androidx-ui = { group = "androidx.compose.ui", name = "ui", version.ref = "androidx-ui" }
+#noinspection SimilarGradleDependency
 androidx-ui-graphics = { group = "androidx.compose.ui", name = "ui-graphics", version.ref = "androidx-ui-graphics" }
+#noinspection SimilarGradleDependency
 androidx-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview", version.ref = "androidx-ui-tooling-preview" }
+#noinspection SimilarGradleDependency
 androidx-material3 = { group = "androidx.compose.material3", name = "material3", version.ref = "androidx-material3" }
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "androidx-appcompat" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
@@ -90,27 +99,36 @@ androidx-activity = { group = "androidx.activity", name = "activity", version.re
 androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "androidx-constraintlayout" }
 androidx-navigation-runtime-ktx = { group = "androidx.navigation", name = "navigation-runtime-ktx", version.ref = "androidx-navigation-runtime" }
 androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "androidx-navigation-compose" }
+#noinspection SimilarGradleDependency
 junit = { group = "junit", name = "junit", version.ref = "junit" }
+#noinspection SimilarGradleDependency
 androidx-junit = { group = "androidx.test.ext", name = "junit-ktx", version.ref = "androidx-junit" }
+#noinspection SimilarGradleDependency
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "androidx-espresso-core" }
 androidx-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4", version.ref = "androidx-ui-test-junit4" }
+#noinspection SimilarGradleDependency
 androidx-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling", version.ref = "androidx-ui-tooling" }
 androidx-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest", version.ref = "androidx-ui-test-manifest" }
+#noinspection SimilarGradleDependency
 google-maps-sdk = { group = "com.google.android.gms", name = "play-services-maps", version.ref = "google-maps-sdk" }
+#noinspection SimilarGradleDependency
 google-location-sdk = { group = "com.google.android.gms", name = "play-services-location", version.ref = "google-location-sdk" }
-maps-compose = { group = "com.google.maps.android", name = "maps-compose", version.ref = "maps-compose" }
+#noinspection SimilarGradleDependency
+maps-compose = { group = "com.google.maps.android", name = "maps-compose", version.ref = "mapsCompose" }
+#noinspection SimilarGradleDependency
 androidx-compose-material3 = { group = "androidx.compose.material3", name = "material3", version.ref = "material3" }
+#noinspection SimilarGradleDependency
 androidx-compose-ui-graphics = { group = "androidx.compose.ui", name = "ui-graphics", version.ref = "compose" }
+#noinspection SimilarGradleDependency
 androidx-compose-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview", version.ref = "compose" }
-androidx-compose-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest", version.ref = "compose" }
-androidx-compose-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4", version.ref = "compose" }
 androidx-compose-material-icons-core = { group = "androidx.compose.material", name = "material-icons-core", version.ref = "compose" }
+#noinspection SimilarGradleDependency
 androidx-compose-material-icons-extended = { group = "androidx.compose.material", name = "material-icons-extended", version.ref = "compose" }
+#noinspection SimilarGradleDependency
 places = { group = "com.google.android.libraries.places", name = "places", version.ref = "places" }
 
 [plugins]
-dokka = { id = "org.jetbrains.dokka", version.ref = "dokka" }
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
+#noinspection SimilarGradleDependency
 jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 android-application = { id = "com.android.application", version.ref = "agp" }
-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }

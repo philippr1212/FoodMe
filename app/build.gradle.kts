@@ -56,17 +56,30 @@ dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
+    implementation(libs.androidx.core.ktx)
+    implementation(libs.androidx.lifecycle.runtime.ktx)
+    implementation(libs.androidx.activity.compose)
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.ui)
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
     implementation(libs.androidx.appcompat)
+    implementation(libs.androidx.activity)
+    implementation(libs.androidx.constraintlayout)
+    implementation(libs.androidx.navigation.runtime.ktx)
+    implementation(libs.androidx.navigation.compose)
     implementation(libs.material)
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
     implementation(libs.androidx.navigation.runtime.ktx)
     implementation(libs.androidx.navigation.compose)
+    implementation(platform(libs.androidx.compose.bom))
+    implementation(libs.androidx.compose.material3)
+    implementation(libs.androidx.compose.material)
+    implementation(libs.androidx.compose.ui)
+    implementation(libs.androidx.compose.ui.graphics)
+    implementation(libs.androidx.compose.ui.tooling.preview)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -74,107 +87,40 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
-}
-
-dependencies {
-    implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.lifecycle.runtime.ktx)
-    implementation(libs.androidx.activity.compose)
-
-    // Jetpack Compose dependencies
-    implementation(platform(libs.androidx.compose.bom)) // Compose BOM (Bill of Materials)
-    implementation(libs.androidx.compose.material3) // Material 3 for newer components
-    implementation(libs.androidx.compose.material) // Material for older components
-    implementation(libs.androidx.compose.ui)
-    implementation(libs.androidx.compose.ui.graphics)
-    implementation(libs.androidx.compose.ui.tooling.preview)
-
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
     implementation(libs.androidx.navigation.runtime.ktx)
     implementation(libs.androidx.navigation.compose)
-
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.androidx.espresso.core)
-    androidTestImplementation(platform(libs.androidx.compose.bom))
-    androidTestImplementation(libs.androidx.compose.ui.test.junit4)
-    debugImplementation(libs.androidx.compose.ui.tooling)
-    debugImplementation(libs.androidx.compose.ui.test.manifest)
-}
-
-dependencies {
-    // Andere Abhängigkeiten ...
-
     implementation(libs.androidx.compose.material.icons.core)
     implementation(libs.androidx.compose.material.icons.extended)
-}
-
-dependencies {
-    // Andere Abhängigkeiten ...
-
-    implementation("com.google.android.gms:play-services-location:21.3.0") // Aktuellste Version überprüfen
-}
-
-dependencies {
-    // Andere Abhängigkeiten ...
-
-    implementation("com.google.maps.android:maps-compose:6.1.0") // Aktuellste Version überprüfen
-}
-
-dependencies {
-    // Google Maps and Places
+    implementation(libs.google.location.sdk)
+    implementation(libs.maps.compose)
     implementation (libs.google.maps.sdk)
-    // Jetpack Compose for Google Maps
-    implementation ("com.google.maps.android:maps-compose:2.11.3")
-
-    // Other dependencies...
-}
-
-dependencies {
-    implementation("com.google.android.gms:play-services-location:21.3.0")
-}
-dependencies {
-    implementation ("com.google.maps.android:maps-utils-ktx:2.2.0") // falls du zusätzliche Funktionen benötigst
-}
-
-dependencies {
+    implementation (libs.maps.compose.v2113)
+    implementation(libs.play.services.location.v2101)
+    implementation (libs.maps.utils.ktx.v220)
     implementation(libs.places)// Jetpack Compose UI dependencies
-    implementation("androidx.compose.ui:ui:1.5.0")
-    implementation("androidx.compose.foundation:foundation:1.5.0")
-    implementation("androidx.compose.material:material:1.5.0")
-
-    // Required for Compose's preview and tooling support
-    implementation("androidx.compose.ui:ui-tooling-preview:1.5.0")
-    debugImplementation("androidx.compose.ui:ui-tooling:1.5.0")
-
-    // Required for Activity support with Compose
-    implementation("androidx.activity:activity-compose:1.8.0")
-
-    // Optional: Icons and more Material components
-    implementation("androidx.compose.material:material-icons-extended:1.5.0")
-    implementation ("androidx.compose.ui:ui:1.0.0") // Verwende die passende Version für dein Projekt
-
-}
-
-dependencies {
-    implementation("com.google.android.gms:play-services-maps:18.1.0")
-}
-dependencies {
-    implementation("com.google.android.libraries.places:places:3.1.0")
-}
-dependencies {
-    implementation("androidx.fragment:fragment-ktx:1.6.0")
-}
-dependencies {
-    implementation ("com.google.android.libraries.places:places:latest_version")
-}
-dependencies {
+    implementation(libs.androidx.ui.v150)
+    implementation(libs.androidx.foundation)
+    implementation(libs.androidx.material)
+    implementation(libs.androidx.ui.tooling.preview.v150)
+    debugImplementation(libs.androidx.ui.tooling.v150)
+    implementation(libs.androidx.activity.compose.v180)
+    implementation(libs.androidx.material.icons.extended.v150)
+    implementation (libs.androidx.ui.v100)
+    implementation(libs.play.services.maps.v1810)
+    implementation(libs.places.v310)
+    implementation(libs.androidx.fragment.ktx)
+    implementation (libs.places.vlatestversion)
     implementation (libs.androidx.fragment)
-    implementation("com.google.android.gms:play-services-maps:18.1.0")
-    implementation ("com.squareup.retrofit2:retrofit:2.9.0")
-    implementation ("com.squareup.retrofit2:converter-gson:2.9.0")
-
+    implementation (libs.google.maps.sdk)
+    implementation (libs.retrofit)
+    implementation (libs.converter.gson)
+    implementation (libs.kotlinx.coroutines.play.services)
 }
+
+
+
+
