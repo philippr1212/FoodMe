@@ -21,7 +21,7 @@
         <!-- Google Places API-Schlüssel -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyAa4-7RWEZvNyA-97dcz_6fKbPjfRJU8xI"/>
+            android:value="AIzaSyCVnbT4XT391c0WfRyy-jnr7q3BPSbwTOM"/>
 
         <!-- HomePageActivity hinzufügen -->
         <activity

@@ -82,9 +82,11 @@ class HomePageActivity : ComponentActivity(), OnMapReadyCallback { //HomepageAct
 
     //Creating example markers for the map (Position; Name; Café, Bar or Restaurant)
     private val restaurants = listOf(
+        MarkerOptions().position(LatLng(53.5402, 9.9908)).title("The Meat & Greet").snippet("Restaurant"),
         MarkerOptions().position(LatLng(53.5416, 9.9911)).title("Vlet in der Speicherstadt").snippet("Restaurant"),
         MarkerOptions().position(LatLng(53.5588, 9.9814)).title("Henssler Henssler").snippet("Restaurant"),
         MarkerOptions().position(LatLng(53.5534, 9.9912)).title("Restaurant Haerlin").snippet("Restaurant"),
+        MarkerOptions().position(LatLng(53.5417, 9.9752)).title("Brücke 10").snippet("Restaurant"),
         MarkerOptions().position(LatLng(53.5638, 9.9735)).title("Gasthaus Wichmann").snippet("Restaurant"),
         MarkerOptions().position(LatLng(53.5515, 9.9812)).title("Taverna Kiriakos").snippet("Restaurant"),
         MarkerOptions().position(LatLng(53.5585, 9.9819)).title("Lüftl-Keller").snippet("Restaurant"),
@@ -94,6 +96,7 @@ class HomePageActivity : ComponentActivity(), OnMapReadyCallback { //HomepageAct
         MarkerOptions().position(LatLng(53.5491, 9.9810)).title("Heldenplatz").snippet("Restaurant"),
         MarkerOptions().position(LatLng(53.5515, 9.9912)).title("Lili's Bistro").snippet("Restaurant"),
         MarkerOptions().position(LatLng(53.5473, 9.9920)).title("Hofbräuhaus Hamburg").snippet("Restaurant"),
+        MarkerOptions().position(LatLng(53.5430, 9.9804)).title("Störtebeker Elbphilharmonie").snippet("Restaurant"),
         MarkerOptions().position(LatLng(53.5524, 9.9787)).title("Zum Alten Mädchen").snippet("Restaurant"),
         MarkerOptions().position(LatLng(53.5514, 9.9897)).title("La Vela").snippet("Restaurant"),
         MarkerOptions().position(LatLng(53.5482, 9.9821)).title("Mutterland").snippet("Restaurant"),
@@ -101,13 +104,16 @@ class HomePageActivity : ComponentActivity(), OnMapReadyCallback { //HomepageAct
         MarkerOptions().position(LatLng(53.5440, 9.9770)).title("Skyline Bar 20up").snippet("Restaurant"),
         MarkerOptions().position(LatLng(53.5511, 9.9723)).title("Bistro du Bac").snippet("Restaurant"),
         MarkerOptions().position(LatLng(53.5478, 9.9781)).title("Bistro Kutscher").snippet("Restaurant"),
+        MarkerOptions().position(LatLng(53.5532, 9.9941)).title("La Tasca").snippet("Restaurant"),
         MarkerOptions().position(LatLng(53.5474, 9.9709)).title("Schweinske").snippet("Restaurant"),
         MarkerOptions().position(LatLng(53.5501, 9.9776)).title("Gosch Sylt").snippet("Restaurant"),
         MarkerOptions().position(LatLng(53.5520, 9.9928)).title("Zwei Stühle").snippet("Restaurant"),
         MarkerOptions().position(LatLng(53.5580, 9.9801)).title("Park Restaurant").snippet("Restaurant"),
+        MarkerOptions().position(LatLng(53.5405, 9.9850)).title("HafenCity").snippet("Restaurant"),
         MarkerOptions().position(LatLng(53.5400, 9.9632)).title("Le Canard").snippet("Restaurant"),
         MarkerOptions().position(LatLng(53.5543, 9.9760)).title("Auster Bar & Grill").snippet("Restaurant"),
         MarkerOptions().position(LatLng(53.5523, 9.9801)).title("Café Erdapfel").snippet("Restaurant"),
+        MarkerOptions().position(LatLng(53.5476, 9.9847)).title("Asia Gourmet").snippet("Restaurant"),
         MarkerOptions().position(LatLng(53.5538, 9.9874)).title("Elb-Insel").snippet("Restaurant"),
         MarkerOptions().position(LatLng(53.5549, 9.9798)).title("Mayer's Restaurant").snippet("Restaurant"),
         MarkerOptions().position(LatLng(53.5590, 9.9855)).title("Zur Alten Mühle").snippet("Restaurant"),
@@ -119,11 +125,13 @@ class HomePageActivity : ComponentActivity(), OnMapReadyCallback { //HomepageAct
         MarkerOptions().position(LatLng(53.5631, 9.9789)).title("Marina Restaurant").snippet("Restaurant"),
         MarkerOptions().position(LatLng(53.5578, 9.9733)).title("Hafenblick").snippet("Restaurant"),
         MarkerOptions().position(LatLng(53.5468, 9.9819)).title("Scharhörn").snippet("Restaurant"),
+        MarkerOptions().position(LatLng(53.5423, 9.9750)).title("Morgenland").snippet("Restaurant"),
         MarkerOptions().position(LatLng(53.5603, 9.9797)).title("Wolkenlos").snippet("Restaurant"),
         MarkerOptions().position(LatLng(53.5584, 9.9904)).title("Alsterperle").snippet("Restaurant"),
         MarkerOptions().position(LatLng(53.5513, 9.9742)).title("Avenue").snippet("Restaurant"),
         MarkerOptions().position(LatLng(53.5591, 9.9703)).title("City Grill").snippet("Restaurant"),
         MarkerOptions().position(LatLng(53.5505, 9.9657)).title("Wienerwald").snippet("Restaurant"),
+        MarkerOptions().position(LatLng(53.5477, 9.9832)).title("Lammert").snippet("Restaurant"),
         MarkerOptions().position(LatLng(53.5531, 9.9770)).title("Hamburg 7").snippet("Restaurant"),
         MarkerOptions().position(LatLng(53.5562, 9.9750)).title("Alsterküche").snippet("Restaurant"),
         MarkerOptions().position(LatLng(53.5537, 9.9758)).title("Schöne Aussichten").snippet("Restaurant"),
@@ -822,7 +830,7 @@ class HomePageActivity : ComponentActivity(), OnMapReadyCallback { //HomepageAct
         val hamburg = LatLng(53.5511, 9.9937)
         googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(hamburg, 16f))
 
-       //Check if there is a permission for using the location of the user, otherwise there is a fallback location with some coordinates in Hamburg
+        //Check if there is a permission for using the location of the user, otherwise there is a fallback location with some coordinates in Hamburg
         if (ContextCompat.checkSelfPermission(
                 this,
                 Manifest.permission.ACCESS_FINE_LOCATION

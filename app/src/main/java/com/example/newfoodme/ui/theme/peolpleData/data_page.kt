@@ -1,6 +1,7 @@
 package com.example.newfoodme.ui.theme.peopleData
 
 import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -12,6 +13,7 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -21,6 +23,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.newfoodme.ui.theme.classes.CustomTextField
 import androidx.compose.ui.text.font.FontWeight
+import com.example.newfoodme.ui.theme.home.HomePageActivity
+import com.example.newfoodme.ui.theme.profil.ProfileActivity
+import com.example.newfoodme.ui.theme.search.SearchPageActivity
 
 class ProfileActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -45,6 +50,54 @@ class ProfileActivity : ComponentActivity() {
                             sharedPreferences = sharedPreferences,
                             modifier = Modifier.padding(innerPadding)
                         )
+                    },
+                    bottomBar = {
+                        BottomNavigation(
+                            backgroundColor = Color(0xFFFFA500)
+                        ) {
+                            // Navigation to HomePageActivity
+                            BottomNavigationItem(
+                                icon = { Icon(Icons.Default.Home, contentDescription = "Entdecke") },
+                                label = { Text("Entdecke") },
+                                selected = false,
+                                onClick = {
+                                    startActivity(
+                                        Intent(
+                                            this@ProfileActivity,
+                                            HomePageActivity::class.java
+                                        )
+                                    )
+                                }
+                            )
+                            // Navigation to SearchPageActivity
+                            BottomNavigationItem(
+                                icon = { Icon(Icons.Default.Search, contentDescription = "Suche") },
+                                label = { Text("Suche") },
+                                selected = false,
+                                onClick = {
+                                    startActivity(
+                                        Intent(
+                                            this@ProfileActivity,
+                                            SearchPageActivity::class.java
+                                        )
+                                    )
+                                }
+                            )
+                            // Navigation to ProfileActivity
+                            BottomNavigationItem(
+                                icon = { Icon(Icons.Default.Person, contentDescription = "Mein Profil") },
+                                label = { Text("Mein Profil") },
+                                selected = true,
+                                onClick = {
+                                    startActivity(
+                                        Intent(
+                                            this@ProfileActivity,
+                                            ProfileActivity::class.java
+                                        )
+                                    )
+                                }
+                            )
+                        }
                     }
                 )
             }
@@ -74,13 +127,13 @@ fun Profile(
     var newEmail by remember { mutableStateOf(initialEmail) }
 
     var errorMessage by remember { mutableStateOf("") }
-    var successMessage by remember { mutableStateOf("") } 
+    var successMessage by remember { mutableStateOf("") }
 
     fun isValidEmail(email: String): Boolean {
         return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()
     }
 
-    //generell site layout settings
+    // generell site layout settings
     Column(modifier = Modifier.fillMaxSize()) {
         Box(
             modifier = Modifier
@@ -105,7 +158,6 @@ fun Profile(
                 }
             }
         }
-
 
         Column(
             modifier = Modifier
@@ -159,11 +211,8 @@ fun Profile(
                 modifier = Modifier.fillMaxWidth().padding(16.dp)
             )
 
-            // Button to change the new data
             Button(
                 onClick = {
-
-                    //checks if all fields are filled out correctly
                     when {
                         newVorname.isBlank() || newNachname.isBlank() || newPassword.isBlank() -> {
                             errorMessage = "Bitte füllen Sie alle Eingabefelder aus."
@@ -198,7 +247,6 @@ fun Profile(
                 Text(text = "Ändern", color = Color.White)
             }
 
-            //common box for error message and success message
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -209,7 +257,7 @@ fun Profile(
                     errorMessage.isNotEmpty() -> {
                         Text(
                             text = errorMessage,
-                            color = Color.Red,  //error message in red
+                            color = Color.Red,
                             fontSize = 12.sp,
                             fontWeight = FontWeight.Bold,
                             style = MaterialTheme.typography.body1,
@@ -218,7 +266,7 @@ fun Profile(
                     successMessage.isNotEmpty() -> {
                         Text(
                             text = successMessage,
-                            color = Color.Green,  //error message in green
+                            color = Color.Green,
                             fontSize = 12.sp,
                             fontWeight = FontWeight.Bold,
                             style = MaterialTheme.typography.body1,
@@ -226,25 +274,6 @@ fun Profile(
                     }
                 }
             }
-        }
-
-        // Bottom Navigation Bar
-        BottomNavigation(
-            backgroundColor = Color(0xFFFFA500)
-        ) {
-            BottomNavigationItem(
-                icon = { Icon(Icons.Default.Home, contentDescription = "Entdecke") },
-                label = { Text("Entdecke") },
-                selected = false,
-                onClick = {}
-            )
-
-            BottomNavigationItem(
-                icon = { Icon(Icons.Default.Person, contentDescription = "Mein Profil") },
-                label = { Text("Mein Profil") },
-                selected = true,
-                onClick = {}
-            )
         }
     }
 }
