@@ -48,9 +48,8 @@ class MainActivity : ComponentActivity() {
 fun LoginScreen(modifier: Modifier = Modifier) {
     val context = LocalContext.current
     val sharedPreferences = context.getSharedPreferences("LoginPrefs", Context.MODE_PRIVATE)
-
     var email by remember { mutableStateOf(sharedPreferences.getString("email", "") ?: "") }
-    var passwort by remember { mutableStateOf(sharedPreferences.getString("passwort", "") ?: "") }
+    var passwort by remember { mutableStateOf(sharedPreferences.getString("password", "") ?: "") }
     var isEmailValid by remember { mutableStateOf(true) }
 
     fun isValidEmail(email: String): Boolean {
@@ -153,4 +152,3 @@ fun LoginScreen(modifier: Modifier = Modifier) {
         }
     }
 }
-

@@ -36,13 +36,19 @@
             android:exported="true"
             android:theme="@style/Theme.NewFoodMe" />
 
+        <!-- peopleData.ProfileActivity hinzufügen -->
+        <activity
+            android:name=".ui.theme.peopleData.ProfileActivity"
+            android:exported="true"
+            android:theme="@style/Theme.NewFoodMe" />
+
         <!-- ProfileActivity hinzufügen -->
         <activity
             android:name=".ui.theme.registration.RegistrationActivity"
             android:exported="true"
             android:theme="@style/Theme.NewFoodMe" />
-        <!-- MainActivity hinzufügen -->
 
+        <!-- MainActivity hinzufügen -->
         <activity
             android:name=".ui.theme.login.MainActivity"
             android:exported="true"

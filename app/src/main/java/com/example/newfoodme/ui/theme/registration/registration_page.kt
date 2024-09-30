@@ -205,6 +205,7 @@ fun RegistrationScreen(modifier: Modifier = Modifier) {
             // Registration button
             val username = ""
             val password = ""
+
             MyButton1(
                 text = "Registrieren",
                 vorname = vorname,
@@ -213,6 +214,10 @@ fun RegistrationScreen(modifier: Modifier = Modifier) {
                 password = password,
                 onButtonClick = { vorname, nachname, username, password ->
                     println("Vorname: $vorname, Nachname: $nachname, E-Mail: $username, Passwort: $password")
+
+                    // forwarding to login page
+                    val intent = Intent(context, MainActivity::class.java)
+                    context.startActivity(intent)
                 }
             ).Display()
 
