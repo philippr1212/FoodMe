@@ -523,7 +523,7 @@ fun SearchScreen(
                 )
 
                 BottomNavigationItem(
-                    icon = { Icon(Icons.Default.AccountCircle, contentDescription = "Mein Profil") },
+                    icon = { Icon(Icons.Default.Person, contentDescription = "Mein Profil") },
                     label = { Text("Mein Profil") },
                     selected = false,
                     onClick = {

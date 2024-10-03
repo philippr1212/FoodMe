@@ -1,14 +1,16 @@
 package com.example.newfoodme.ui.theme.home
 
-//Import of different android,compose and some individuals (libraries)
+// Import of different android, compose and some individuals (libraries)
 import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.os.Looper
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.widget.Button
 import android.widget.TextView
@@ -39,6 +41,7 @@ import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
@@ -52,7 +55,9 @@ import com.example.newfoodme.R
 import com.example.newfoodme.ui.theme.profil.ProfileActivity
 import com.example.newfoodme.ui.theme.search.SearchPageActivity
 import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationServices
+import com.google.android.gms.location.Priority
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -60,33 +65,33 @@ import com.google.android.gms.maps.model.*
 import androidx.compose.ui.graphics.Color as AppColor
 
 //Creating class "HomePageActivity"
-class HomePageActivity : ComponentActivity(), OnMapReadyCallback { //HomepageActivity inherits from ComponentActivity and
+class HomePageActivity : ComponentActivity(), OnMapReadyCallback { //HomepageActivity inherits from ComponentActivity, OnMapReadyCallback --> Interface with method OnMapRaedy
 
-    //Variables are declared (for Activity)
+    //Variables are declared (for Activity) --> Late-init --> All variables with late-init are later on initialized
+    private lateinit var mapView: com.google.android.gms.maps.MapView //Stores the showing of the gooogle map
+    private lateinit var googleMap: GoogleMap //Stores the interactiv map
+    private lateinit var locationPermissionRequest: ActivityResultLauncher<Array<String>> //Stores the requested permission for the location
+    private lateinit var fusedLocationClient: FusedLocationProviderClient //Stores the exact location of the user
 
-    //Late-init --> All variables with late-init are later on initialized
-    private lateinit var mapView: com.google.android.gms.maps.MapView
-    private lateinit var googleMap: GoogleMap
-    private lateinit var locationPermissionRequest: ActivityResultLauncher<Array<String>>
-    private lateinit var fusedLocationClient: FusedLocationProviderClient
-
+    //Variables for showing the restaurants, cafes and bars on the map
     private var showRestaurants by mutableStateOf(true)
     private var showCafes by mutableStateOf(true)
     private var showBars by mutableStateOf(true)
 
-    private var searchQuery by mutableStateOf(TextFieldValue(""))
-    private var suggestions by mutableStateOf(listOf<String>())
+    private var searchQuery by mutableStateOf(TextFieldValue("")) //Saves the text in search query
+    private var suggestions by mutableStateOf(listOf<String>()) //Saves the list of suggestions
 
-    private var markersMap = mutableMapOf<String, MarkerOptions>()
-    private var lastClickedMarker: Marker? = null
+    private var markersMap = mutableMapOf<String, MarkerOptions>() //Saves sposition and tile for the example markers
+    private var markerReferences = mutableMapOf<String, Marker>() // Saves the referneces of the example markers
+    private var lastClickedMarker: Marker? = null // Saves the last clicked marker
+    private var permissionsGranted = false //Saves the permissions for the locstion of the users
+    private var mapReady = false // Map ready for interaction
 
-    //Creating example markers for the map (Position; Name; Café, Bar or Restaurant)
+    //Creating a list of example markers (restaurants, cafes and bars)
     private val restaurants = listOf(
-        MarkerOptions().position(LatLng(53.5402, 9.9908)).title("The Meat & Greet").snippet("Restaurant"),
         MarkerOptions().position(LatLng(53.5416, 9.9911)).title("Vlet in der Speicherstadt").snippet("Restaurant"),
         MarkerOptions().position(LatLng(53.5588, 9.9814)).title("Henssler Henssler").snippet("Restaurant"),
         MarkerOptions().position(LatLng(53.5534, 9.9912)).title("Restaurant Haerlin").snippet("Restaurant"),
-        MarkerOptions().position(LatLng(53.5417, 9.9752)).title("Brücke 10").snippet("Restaurant"),
         MarkerOptions().position(LatLng(53.5638, 9.9735)).title("Gasthaus Wichmann").snippet("Restaurant"),
         MarkerOptions().position(LatLng(53.5515, 9.9812)).title("Taverna Kiriakos").snippet("Restaurant"),
         MarkerOptions().position(LatLng(53.5585, 9.9819)).title("Lüftl-Keller").snippet("Restaurant"),
@@ -96,7 +101,6 @@ class HomePageActivity : ComponentActivity(), OnMapReadyCallback { //HomepageAct
         MarkerOptions().position(LatLng(53.5491, 9.9810)).title("Heldenplatz").snippet("Restaurant"),
         MarkerOptions().position(LatLng(53.5515, 9.9912)).title("Lili's Bistro").snippet("Restaurant"),
         MarkerOptions().position(LatLng(53.5473, 9.9920)).title("Hofbräuhaus Hamburg").snippet("Restaurant"),
-        MarkerOptions().position(LatLng(53.5430, 9.9804)).title("Störtebeker Elbphilharmonie").snippet("Restaurant"),
         MarkerOptions().position(LatLng(53.5524, 9.9787)).title("Zum Alten Mädchen").snippet("Restaurant"),
         MarkerOptions().position(LatLng(53.5514, 9.9897)).title("La Vela").snippet("Restaurant"),
         MarkerOptions().position(LatLng(53.5482, 9.9821)).title("Mutterland").snippet("Restaurant"),
@@ -104,19 +108,15 @@ class HomePageActivity : ComponentActivity(), OnMapReadyCallback { //HomepageAct
         MarkerOptions().position(LatLng(53.5440, 9.9770)).title("Skyline Bar 20up").snippet("Restaurant"),
         MarkerOptions().position(LatLng(53.5511, 9.9723)).title("Bistro du Bac").snippet("Restaurant"),
         MarkerOptions().position(LatLng(53.5478, 9.9781)).title("Bistro Kutscher").snippet("Restaurant"),
-        MarkerOptions().position(LatLng(53.5532, 9.9941)).title("La Tasca").snippet("Restaurant"),
         MarkerOptions().position(LatLng(53.5474, 9.9709)).title("Schweinske").snippet("Restaurant"),
         MarkerOptions().position(LatLng(53.5501, 9.9776)).title("Gosch Sylt").snippet("Restaurant"),
         MarkerOptions().position(LatLng(53.5520, 9.9928)).title("Zwei Stühle").snippet("Restaurant"),
         MarkerOptions().position(LatLng(53.5580, 9.9801)).title("Park Restaurant").snippet("Restaurant"),
-        MarkerOptions().position(LatLng(53.5405, 9.9850)).title("HafenCity").snippet("Restaurant"),
         MarkerOptions().position(LatLng(53.5400, 9.9632)).title("Le Canard").snippet("Restaurant"),
         MarkerOptions().position(LatLng(53.5543, 9.9760)).title("Auster Bar & Grill").snippet("Restaurant"),
         MarkerOptions().position(LatLng(53.5523, 9.9801)).title("Café Erdapfel").snippet("Restaurant"),
-        MarkerOptions().position(LatLng(53.5476, 9.9847)).title("Asia Gourmet").snippet("Restaurant"),
         MarkerOptions().position(LatLng(53.5538, 9.9874)).title("Elb-Insel").snippet("Restaurant"),
         MarkerOptions().position(LatLng(53.5549, 9.9798)).title("Mayer's Restaurant").snippet("Restaurant"),
-        MarkerOptions().position(LatLng(53.5590, 9.9855)).title("Zur Alten Mühle").snippet("Restaurant"),
         MarkerOptions().position(LatLng(53.5566, 9.9822)).title("Marion's Restaurant").snippet("Restaurant"),
         MarkerOptions().position(LatLng(53.5504, 9.9716)).title("Edelcafé").snippet("Restaurant"),
         MarkerOptions().position(LatLng(53.5587, 9.9702)).title("Ristorante Da Vinci").snippet("Restaurant"),
@@ -125,13 +125,11 @@ class HomePageActivity : ComponentActivity(), OnMapReadyCallback { //HomepageAct
         MarkerOptions().position(LatLng(53.5631, 9.9789)).title("Marina Restaurant").snippet("Restaurant"),
         MarkerOptions().position(LatLng(53.5578, 9.9733)).title("Hafenblick").snippet("Restaurant"),
         MarkerOptions().position(LatLng(53.5468, 9.9819)).title("Scharhörn").snippet("Restaurant"),
-        MarkerOptions().position(LatLng(53.5423, 9.9750)).title("Morgenland").snippet("Restaurant"),
         MarkerOptions().position(LatLng(53.5603, 9.9797)).title("Wolkenlos").snippet("Restaurant"),
         MarkerOptions().position(LatLng(53.5584, 9.9904)).title("Alsterperle").snippet("Restaurant"),
         MarkerOptions().position(LatLng(53.5513, 9.9742)).title("Avenue").snippet("Restaurant"),
         MarkerOptions().position(LatLng(53.5591, 9.9703)).title("City Grill").snippet("Restaurant"),
         MarkerOptions().position(LatLng(53.5505, 9.9657)).title("Wienerwald").snippet("Restaurant"),
-        MarkerOptions().position(LatLng(53.5477, 9.9832)).title("Lammert").snippet("Restaurant"),
         MarkerOptions().position(LatLng(53.5531, 9.9770)).title("Hamburg 7").snippet("Restaurant"),
         MarkerOptions().position(LatLng(53.5562, 9.9750)).title("Alsterküche").snippet("Restaurant"),
         MarkerOptions().position(LatLng(53.5537, 9.9758)).title("Schöne Aussichten").snippet("Restaurant"),
@@ -142,7 +140,6 @@ class HomePageActivity : ComponentActivity(), OnMapReadyCallback { //HomepageAct
         MarkerOptions().position(LatLng(53.5610, 9.9715)).title("Café Linde").snippet("Restaurant"),
         MarkerOptions().position(LatLng(53.5601, 9.9723)).title("Kaffekommune").snippet("Restaurant"),
         MarkerOptions().position(LatLng(53.5542, 9.9696)).title("Wunderbar").snippet("Restaurant"),
-        MarkerOptions().position(LatLng(53.5520, 9.9734)).title("Bistro Deli").snippet("Restaurant"),
         MarkerOptions().position(LatLng(53.5484, 9.9745)).title("Oberdeck").snippet("Restaurant"),
         MarkerOptions().position(LatLng(53.5525, 9.9644)).title("Gusto").snippet("Restaurant"),
         MarkerOptions().position(LatLng(53.5568, 9.9794)).title("Seepferdchen").snippet("Restaurant"),
@@ -384,12 +381,14 @@ class HomePageActivity : ComponentActivity(), OnMapReadyCallback { //HomepageAct
         MarkerOptions().position(LatLng(53.5535, 9.9715)).title("Bar Seeterrasse").snippet("Bar")
     )
 
-    //First method after activity gets started
-    override fun onCreate(savedInstanceState: Bundle?) { //Method starts with the Start of the Activity
+
+    //Suppression of the lint-warning for barrier-free jot
+    @SuppressLint("ClickableViewAccessibility")
+    override fun onCreate(savedInstanceState: Bundle?) { //OnCreate --> Initial configuration for th activity
         super.onCreate(savedInstanceState)
 
         //Initialisation of mapView
-        mapView = com.google.android.gms.maps.MapView(this)  //mapView --> Show Google Map on Screen
+        mapView = com.google.android.gms.maps.MapView(this) //mapView --> Show Google Map on Screen
         mapView.onCreate(savedInstanceState) //Method to ensure right Creation and Initialisation of the mapView
         mapView.getMapAsync(this) //mapView should be asynchronous in the background
 
@@ -403,20 +402,26 @@ class HomePageActivity : ComponentActivity(), OnMapReadyCallback { //HomepageAct
             if (permissions[Manifest.permission.ACCESS_FINE_LOCATION] == true || //Callback-function --> User allows access to location, location is called up
                 permissions[Manifest.permission.ACCESS_COARSE_LOCATION] == true
             ) {
-                getCurrentLocation()
+                permissionsGranted = true
+                if (mapReady && this::googleMap.isInitialized) {
+                    googleMap.isMyLocationEnabled = true
+                    getCurrentLocation()
+                }
             } else {
-                Log.e("Permissions", "Location permission denied") //Otherwise threre is a error message in Log
+                Log.e("Permissions", "Location permission denied") //Otherwise there is a error message in Log
             }
         }
+
 
         // Prepares a list of the example markers, that are shown in the map
         prepareMarkers()
 
         //Function, defines the layout of the activity with Jetpack Compose
         setContent {
-            val context = LocalContext.current // Current context of the acitivity
+            val context = LocalContext.current  // Current context of the acitivity
+            val focusManager = LocalFocusManager.current //Manages the focus within the Compose UI
             val focusRequester = remember { FocusRequester() } //Variable, focus for text input field
-            var isFocused by remember { mutableStateOf(false) } // Variable, focus for text input field
+            var isFocused by remember { mutableStateOf(false) }  // Variable, focus for text input field
 
             //Create a Scaffold --> Definition of the structure for page
             Scaffold(
@@ -498,9 +503,21 @@ class HomePageActivity : ComponentActivity(), OnMapReadyCallback { //HomepageAct
                             .fillMaxSize()
                             .padding(padding)
                     ) {
-
                         // Show Google Map
-                        AndroidView(factory = { mapView }, modifier = Modifier.fillMaxSize())
+                        AndroidView(
+                            factory = {
+                                mapView.apply {
+                                    //Focus gets away, when user interacts with the map
+                                    setOnTouchListener { _, event ->
+                                        if (event.action == MotionEvent.ACTION_DOWN) {
+                                            focusManager.clearFocus()
+                                        }
+                                        false
+                                    }
+                                }
+                            },
+                            modifier = Modifier.fillMaxSize()
+                        )
 
                         //Customizing the zoom in and out button
                         Column(
@@ -508,7 +525,7 @@ class HomePageActivity : ComponentActivity(), OnMapReadyCallback { //HomepageAct
                                 .align(Alignment.BottomEnd)
                                 .padding(16.dp)
                         ) {
-                            //Zoom In Button
+                            //Zoom in button
                             FloatingActionButton(
                                 onClick = {
                                     googleMap.animateCamera(CameraUpdateFactory.zoomIn())
@@ -520,7 +537,7 @@ class HomePageActivity : ComponentActivity(), OnMapReadyCallback { //HomepageAct
 
                             Spacer(modifier = Modifier.height(16.dp))
 
-                            //Zoom Out Buttpn
+                            //Zoom out button
                             FloatingActionButton(
                                 onClick = {
                                     googleMap.animateCamera(CameraUpdateFactory.zoomOut())
@@ -593,14 +610,14 @@ class HomePageActivity : ComponentActivity(), OnMapReadyCallback { //HomepageAct
                                     maxLines = 1
                                 )
 
-                                if (searchQuery.text.isNotEmpty()) { //Checks that the searchbar isn't empty:
+                                if (searchQuery.text.isNotEmpty()) { //Checks that the searchbar isn't empty
                                     IconButton(
                                         onClick = {
-                                            searchQuery = TextFieldValue("") //Empties the searchbar
+                                            searchQuery = TextFieldValue("")  //Empties the searchbar
                                             suggestions = listOf() //Empties the suggestions
                                             updateMarkers()
                                         },
-                                        modifier = Modifier.padding(end = (2).dp)
+                                        modifier = Modifier.padding(end = 2.dp)
                                     ) {
                                         //Close-Icon and customizing it
                                         Icon(
@@ -664,7 +681,12 @@ class HomePageActivity : ComponentActivity(), OnMapReadyCallback { //HomepageAct
                         )
                         // Navigation to ProfileActivity
                         BottomNavigationItem(
-                            icon = { Icon(Icons.Default.Person, contentDescription = "Mein Profil") },
+                            icon = {
+                                Icon(
+                                    Icons.Default.Person,
+                                    contentDescription = "Mein Profil"
+                                )
+                            },
                             label = { Text("Mein Profil") },
                             selected = true,
                             onClick = {
@@ -680,236 +702,289 @@ class HomePageActivity : ComponentActivity(), OnMapReadyCallback { //HomepageAct
                 }
             )
         }
-        // Check if there is a permission for using the location of the user
-        if (ContextCompat.checkSelfPermission(
-                this,
-                Manifest.permission.ACCESS_FINE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
-            locationPermissionRequest.launch(
-                arrayOf(
-                    Manifest.permission.ACCESS_FINE_LOCATION,
-                    Manifest.permission.ACCESS_COARSE_LOCATION
+
+            // Check if there is a permission for using the location of the user
+            if (ContextCompat.checkSelfPermission(
+                    this,
+                    Manifest.permission.ACCESS_FINE_LOCATION
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+                locationPermissionRequest.launch(
+                    arrayOf(
+                        Manifest.permission.ACCESS_FINE_LOCATION,
+                        Manifest.permission.ACCESS_COARSE_LOCATION
+                    )
                 )
-            )
-        } else {
-            getCurrentLocation()
-        }
-    }
-
-    //Prepare markers for the map
-    private fun prepareMarkers() {
-        markersMap.apply { //--> saves the markers (strings and objects)
-            clear()
-            restaurants.forEach { marker ->  // Every restaurant marker to markersMap
-                put(marker.title ?: "", marker) //Marker to markersMap
-            }
-            cafes.forEach { marker ->
-                put(marker.title ?: "", marker)
-            }
-            bars.forEach { marker ->
-                put(marker.title ?: "", marker)
             }
         }
-    }
 
-    override fun onMapReady(map: GoogleMap) {
-        googleMap = map
-
-        // Customizing the sytleJson
-        val styleJson = """
-            [
-                {
-                    "elementType": "geometry",
-                    "stylers": [
-                        {
-                            "color": "#f5f5f5"
-                        }
-                    ]
-                },
-                {
-                    "elementType": "labels.icon",
-                    "stylers": [
-                        {
-                            "visibility": "off"
-                        }
-                    ]
-                },
-                {
-                    "elementType": "labels.text.fill",
-                    "stylers": [
-                        {
-                            "color": "#616161"
-                        }
-                    ]
-                },
-                {
-                    "elementType": "labels.text.stroke",
-                    "stylers": [
-                        {
-                            "color": "#f5f5f5"
-                        }
-                    ]
-                },
-                {
-                    "featureType": "administrative.land_parcel",
-                    "elementType": "labels",
-                    "stylers": [
-                        {
-                            "visibility": "off"
-                        }
-                    ]
-                },
-                {
-                    "featureType": "poi",
-                    "elementType": "geometry",
-                    "stylers": [
-                        {
-                            "color": "#c5e1a5"
-                        }
-                    ]
-                },
-                {
-                    "featureType": "poi",
-                    "elementType": "labels",
-                    "stylers": [
-                        {
-                            "visibility": "off"
-                        }
-                    ]
-                },
-                {
-                    "featureType": "poi.park",
-                    "elementType": "geometry",
-                    "stylers": [
-                        {
-                            "color": "#a5d6a7"
-                        }
-                    ]
-                },
-                {
-                    "featureType": "road",
-                    "elementType": "geometry",
-                    "stylers": [
-                        {
-                            "color": "#ffffff"
-                        }
-                    ]
-                },
-                {
-                    "featureType": "road",
-                    "elementType": "labels",
-                    "stylers": [
-                        {
-                            "visibility": "on"
-                        }
-                    ]
-                },
-                {
-                    "featureType": "water",
-                    "elementType": "geometry",
-                    "stylers": [
-                        {
-                            "color": "#81d4fa"
-                        }
-                    ]
+        //Prepare markers for the map
+        private fun prepareMarkers() {
+            markersMap.apply { //--> saves the markers (strings and objects)
+                clear()
+                restaurants.forEach { marker -> // Every restaurant marker to markersMap
+                    put(marker.title ?: "", marker) //Marker to markersMap
                 }
-            ]
-        """.trimIndent()
-
-        // styleJson on the map
-        googleMap.setMapStyle(MapStyleOptions(styleJson))
-
-        // Info Window for every example marker
-        googleMap.setInfoWindowAdapter(CustomInfoWindowAdapter(this))
-
-
-        updateMarkers()
-
-        //Fallback coordinates Hamburg
-        val hamburg = LatLng(53.5511, 9.9937)
-        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(hamburg, 16f))
-
-        //Check if there is a permission for using the location of the user, otherwise there is a fallback location with some coordinates in Hamburg
-        if (ContextCompat.checkSelfPermission(
-                this,
-                Manifest.permission.ACCESS_FINE_LOCATION
-            ) == PackageManager.PERMISSION_GRANTED
-        ) {
-            googleMap.isMyLocationEnabled = true
-        } else {
-
-            showFallbackLocation(hamburg)
+                cafes.forEach { marker ->
+                    put(marker.title ?: "", marker)
+                }
+                bars.forEach { marker ->
+                    put(marker.title ?: "", marker)
+                }
+            }
         }
 
-        //Listener for marker that got clicked
-        googleMap.setOnMarkerClickListener { marker ->
-            marker.showInfoWindow() //Info Window for Markers
-            lastClickedMarker = marker
-            true
+        //Method for configuration of the google parameter
+        override fun onMapReady(map: GoogleMap) {
+            googleMap = map
+            mapReady = true
+
+            // Customizing the styleJson based on suggestions from AI (artificial intelligence)
+            val styleJson = """
+                [
+                    {
+                        "elementType": "geometry",
+                        "stylers": [
+                            {
+                                "color": "#f5f5f5"
+                            }
+                        ]
+                    },
+                    {
+                        "elementType": "labels.icon",
+                        "stylers": [
+                            {
+                                "visibility": "off"
+                            }
+                        ]
+                    },
+                    {
+                        "elementType": "labels.text.fill",
+                        "stylers": [
+                            {
+                                "color": "#616161"
+                            }
+                        ]
+                    },
+                    {
+                        "elementType": "labels.text.stroke",
+                        "stylers": [
+                            {
+                                "color": "#f5f5f5"
+                            }
+                        ]
+                    },
+                    {
+                        "featureType": "administrative.land_parcel",
+                        "elementType": "labels",
+                        "stylers": [
+                            {
+                                "visibility": "off"
+                            }
+                        ]
+                    },
+                    {
+                        "featureType": "poi",
+                        "elementType": "geometry",
+                        "stylers": [
+                            {
+                                "color": "#c5e1a5"
+                            }
+                        ]
+                    },
+                    {
+                        "featureType": "poi",
+                        "elementType": "labels",
+                        "stylers": [
+                            {
+                                "visibility": "off"
+                            }
+                        ]
+                    },
+                    {
+                        "featureType": "poi.park",
+                        "elementType": "geometry",
+                        "stylers": [
+                            {
+                                "color": "#a5d6a7"
+                            }
+                        ]
+                    },
+                    {
+                        "featureType": "road",
+                        "elementType": "geometry",
+                        "stylers": [
+                            {
+                                "color": "#ffffff"
+                            }
+                        ]
+                    },
+                    {
+                        "featureType": "road",
+                        "elementType": "labels",
+                        "stylers": [
+                            {
+                                "visibility": "on"
+                            }
+                        ]
+                    },
+                    {
+                        "featureType": "water",
+                        "elementType": "geometry",
+                        "stylers": [
+                            {
+                                "color": "#81d4fa"
+                            }
+                        ]
+                    }
+                ]
+            """.trimIndent()
+
+            // styleJson on the map
+            googleMap.setMapStyle(MapStyleOptions(styleJson))
+
+            // Info Window for every example marker
+            googleMap.setInfoWindowAdapter(CustomInfoWindowAdapter(this))
+
+            //If the user clicks on a example marker, the user will be send to the SearchPageActivity with all the information of the marker
+            googleMap.setOnInfoWindowClickListener { clickedMarker ->
+                val intent = Intent(this, SearchPageActivity::class.java).apply {
+                    putExtra("locationTitle", clickedMarker.title)
+                    putExtra("infoText", clickedMarker.snippet)
+                }
+                startActivity(intent)
+            }
+
+            updateMarkers()
+
+            //Fallback coordinates Hamburg
+            val hamburg = LatLng(53.5511, 9.9937)
+            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(hamburg, 16f))
+
+            //Check if there is a permission for using the location of the user, otherwise there is a fallback location with some coordinates in Hamburg
+            if (ContextCompat.checkSelfPermission(
+                    this,
+                    Manifest.permission.ACCESS_FINE_LOCATION
+                ) == PackageManager.PERMISSION_GRANTED
+            ) {
+                googleMap.isMyLocationEnabled = true
+                getCurrentLocation()
+            } else {
+                if (permissionsGranted) {
+                    googleMap.isMyLocationEnabled = true
+                    getCurrentLocation()
+                } else {
+                    showFallbackLocation(hamburg)
+                }
+            }
+
+            //Listener for marker that got clicked
+            googleMap.setOnMarkerClickListener { marker ->
+                marker.showInfoWindow() //Info Window for Markers
+                lastClickedMarker = marker
+                true
+            }
         }
-    }
 
     //Updating markers based on using the filters
     private fun updateMarkers() {
+        if (!this::googleMap.isInitialized) { // Checks if the google map variable has been already initialized. After that the other operation can start
+            return
+        }
         googleMap.clear()
+        markerReferences.clear()
 
-        if (showRestaurants) { //Shows restaurants on the map, if the filter is activated
-            restaurants.forEach { googleMap.addMarker(it) }
+        if (showRestaurants) { //Shows restaurants on the map, if the filter is activated (same for cafes and bars)
+            restaurants.forEach {
+                val marker = googleMap.addMarker(it)
+                if (marker != null) {
+                    markerReferences[marker.title ?: ""] = marker
+                }
+            }
         }
         if (showCafes) {
-            cafes.forEach { googleMap.addMarker(it) }
+            cafes.forEach {
+                val marker = googleMap.addMarker(it)
+                if (marker != null) {
+                    markerReferences[marker.title ?: ""] = marker
+                }
+            }
         }
         if (showBars) {
-            bars.forEach { googleMap.addMarker(it) }
+            bars.forEach {
+                val marker = googleMap.addMarker(it)
+                if (marker != null) {
+                    markerReferences[marker.title ?: ""] = marker
+                }
+            }
         }
-
 
         //Checks that the search query isn't empty
         if (searchQuery.text.isNotEmpty()) {
-            markersMap.filterKeys { it.contains(searchQuery.text.trim(), ignoreCase = true) }
-                .values
-                .forEach { googleMap.addMarker(it) }
+            val queryMarkers = markersMap.filterKeys {
+                it.contains(searchQuery.text.trim(), ignoreCase = true)
+            }.values
+
+            queryMarkers.forEach {
+                val marker = googleMap.addMarker(it)
+                if (marker != null) {
+                    markerReferences[marker.title ?: ""] = marker
+                }
+            }
         }
     }
 
-    //Generates a list of suggestions
-    private fun updateSuggestions() {
-        val query = searchQuery.text.trim()
-        suggestions = if (query.length > 2) { // Length of words, so that the suggestions can show up
-            markersMap.keys.filter { it.contains(query, ignoreCase = true) }
-        } else {
-            listOf()
+        //Generates a list of suggestions
+        private fun updateSuggestions() {
+            val query = searchQuery.text.trim()
+            suggestions = if (query.length > 2) {  // Length of words, so that the suggestions can show up
+                markersMap.keys.filter { it.contains(query, ignoreCase = true) }
+            } else {
+                listOf()
+            }
         }
-    }
 
     //Searches the marker based on the name
     private fun zoomToMarker(title: String) {
-        markersMap[title]?.let { markerOptions ->
+        if (!this::googleMap.isInitialized) {
+            Log.e("zoomToMarker", "GoogleMap is not initialized")
+            return
+        }
 
+        // Searching for marker based on the name
+        val markerOptions = markersMap[title]
+        if (markerOptions != null) {
+            // Removing the marker
+            markerReferences[title]?.remove()
+            markerReferences.remove(title)
+
+            // Put the marker on the map
             val marker = googleMap.addMarker(markerOptions)
-            marker?.showInfoWindow()
+            if (marker != null) {
+                // Info window of the marker is shown
+                marker.showInfoWindow()
 
+                // Saving the reference of the marker
+                markerReferences[title] = marker
 
-            marker?.let {
-                googleMap.setOnInfoWindowClickListener { clickedMarker ->
-                    if (clickedMarker == marker) {
-                        val intent = Intent(this, SearchPageActivity::class.java).apply { //After clicking at the info window, the user gets to the search page with all the information of the marker
-                            putExtra("locationTitle", clickedMarker.title)
-                            putExtra("infoText", clickedMarker.snippet)
-                        }
-                        startActivity(intent)
-                    }
-                }
+                // Move the camera to the elected marker and zooming in
+                googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(marker.position, 15f))
+            } else {
+                Log.e("zoomToMarker", "Marker could not be added to GoogleMap")
             }
-
-
-            googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(markerOptions.position, 15f))
+        } else {
+            Log.e("zoomToMarker", "No marker options found for title: $title")
         }
     }
 
-    //Checks if there is a permission for the location, if not, there is fallback location in Hamburg
-    private fun getCurrentLocation() {
+
+    //Lint-warning for missing permission
+    @SuppressLint("MissingPermission")
+    private fun getCurrentLocation() { //Checks if there is a permission for the location, if not, there is fallback location in Hamburg
+        if (!this::googleMap.isInitialized) {
+            return
+        }
+
         if (ActivityCompat.checkSelfPermission(
                 this,
                 Manifest.permission.ACCESS_FINE_LOCATION
@@ -920,103 +995,123 @@ class HomePageActivity : ComponentActivity(), OnMapReadyCallback { //HomepageAct
         ) {
             return
         }
-        fusedLocationClient.lastLocation.addOnSuccessListener { location ->
-            if (location != null) {
-                val currentLatLng = LatLng(location.latitude, location.longitude)
-                googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(currentLatLng, 15f))
 
+        // New location request
+        val locationRequest = LocationRequest.Builder(Priority.PRIORITY_HIGH_ACCURACY, 0).apply {
+            setMaxUpdates(1) // Just one location update !!!
+        }.build()
 
-                //Customizing the position marker
-                val circleOptions = CircleOptions()
-                    .center(currentLatLng)
-                    .fillColor(AppColor(0x400000FF).toArgb())
-                    .strokeWidth(2f)
+        val locationCallback = object : com.google.android.gms.location.LocationCallback() {
+            override fun onLocationResult(locationResult: com.google.android.gms.location.LocationResult) {
+                val location = locationResult.lastLocation
+                if (location != null) {
+                    val currentLatLng = LatLng(location.latitude, location.longitude)
+                    runOnUiThread {
+                        googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(currentLatLng, 15f))
 
-                googleMap.addCircle(circleOptions)
-            } else {
+                        //Customizing the position marker
+                        val circleOptions = CircleOptions()
+                            .center(currentLatLng)
+                            .fillColor(AppColor(0x400000FF).toArgb())
+                            .strokeWidth(2f)
 
-                val fallbackLatLng = LatLng(53.5511, 9.9937)
-                showFallbackLocation(fallbackLatLng)
+                        googleMap.addCircle(circleOptions)
+                    }
+                } else {
+                    Log.e("LocationError", "Location is null")
+                    val fallbackLatLng = LatLng(53.5511, 9.9937)
+                    runOnUiThread {
+                        showFallbackLocation(fallbackLatLng)
+                    }
+                }
+                // Remove location updates
+                fusedLocationClient.removeLocationUpdates(this)
             }
         }
+
+        fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, Looper.getMainLooper())
     }
+
 
     //Customizing the fallback location
     private fun showFallbackLocation(location: LatLng) {
-        val circleOptions = CircleOptions()
-            .center(location)
-            .fillColor(AppColor(0x400000FF).toArgb())
-            .strokeWidth(2f)
+            if (!this::googleMap.isInitialized) {
+                return
+            }
+            val circleOptions = CircleOptions()
+                .center(location)
+                .fillColor(AppColor(0x400000FF).toArgb())
+                .strokeWidth(2f)
 
-        googleMap.addCircle(circleOptions)
-        googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(location, 18f))
-    }
-
-    override fun onResume() {
-        super.onResume()
-        mapView.onResume()
-    }
-
-    override fun onStart() {
-        super.onStart()
-        mapView.onStart()
-    }
-
-    override fun onStop() {
-        super.onStop()
-        mapView.onStop()
-    }
-
-    override fun onPause() {
-        mapView.onPause()
-        super.onPause()
-    }
-
-    override fun onDestroy() {
-        mapView.onDestroy()
-        super.onDestroy()
-    }
-
-    override fun onLowMemory() {
-        super.onLowMemory()
-        mapView.onLowMemory()
-    }
-
-
-    //Creates a info window by using the custom_info_window.xml and getting the user from the info window to the search page by clicking on info
-    private class CustomInfoWindowAdapter(context: Context) : GoogleMap.InfoWindowAdapter {
-        @SuppressLint("InflateParams")
-        private val mWindow: View = LayoutInflater.from(context).inflate(R.layout.custom_info_window, null)
-
-        override fun getInfoContents(marker: Marker): View {
-            render(marker, mWindow)
-            return mWindow
+            googleMap.addCircle(circleOptions)
+            googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(location, 18f))
         }
 
-        override fun getInfoWindow(marker: Marker): View {
-            render(marker, mWindow)
-            return mWindow
+        override fun onResume() {
+            super.onResume()
+            mapView.onResume()
         }
 
-        private fun render(marker: Marker, view: View) {
-            val title = marker.title
-            val snippet = marker.snippet
+        override fun onStart() {
+            super.onStart()
+            mapView.onStart()
+        }
 
-            val titleUi = view.findViewById<TextView>(R.id.title)
-            val snippetUi = view.findViewById<TextView>(R.id.snippet)
-            val button = view.findViewById<Button>(R.id.infoButton)
+        override fun onStop() {
+            super.onStop()
+            mapView.onStop()
+        }
 
-            titleUi.text = title
-            snippetUi.text = snippet
+        override fun onPause() {
+            mapView.onPause()
+            super.onPause()
+        }
 
-            button.setOnClickListener {
-                val context = view.context
-                val intent = Intent(context, SearchPageActivity::class.java).apply {
-                    putExtra("locationTitle", marker.title)
-                    putExtra("infoText", marker.snippet)
+        override fun onDestroy() {
+            mapView.onDestroy()
+            super.onDestroy()
+        }
+
+        override fun onLowMemory() {
+            super.onLowMemory()
+            mapView.onLowMemory()
+        }
+
+        //Creates a info window by using the custom_info_window.xml and getting the user from the info window to the search page by clicking on info
+        private class CustomInfoWindowAdapter(context: Context) : GoogleMap.InfoWindowAdapter {
+            @SuppressLint("InflateParams")
+            private val mWindow: View =
+                LayoutInflater.from(context).inflate(R.layout.custom_info_window, null)
+
+            override fun getInfoContents(marker: Marker): View {
+                render(marker, mWindow)
+                return mWindow
+            }
+
+            override fun getInfoWindow(marker: Marker): View {
+                render(marker, mWindow)
+                return mWindow
+            }
+
+            private fun render(marker: Marker, view: View) {
+                val title = marker.title
+                val snippet = marker.snippet
+
+                val titleUi = view.findViewById<TextView>(R.id.title)
+                val snippetUi = view.findViewById<TextView>(R.id.snippet)
+                val button = view.findViewById<Button>(R.id.infoButton)
+
+                titleUi.text = title
+                snippetUi.text = snippet
+
+                button.setOnClickListener {
+                    val context = view.context
+                    val intent = Intent(context, SearchPageActivity::class.java).apply {
+                        putExtra("locationTitle", marker.title)
+                        putExtra("infoText", marker.snippet)
+                    }
+                    context.startActivity(intent)
                 }
-                context.startActivity(intent)
             }
         }
     }
-}
