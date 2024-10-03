@@ -51,6 +51,8 @@ class ProfileActivity : ComponentActivity() {
                             modifier = Modifier.padding(innerPadding)
                         )
                     },
+
+                    //bottom navigation bar
                     bottomBar = {
                         BottomNavigation(
                             backgroundColor = Color(0xFFFFA500)
@@ -114,6 +116,7 @@ fun Profile(
     sharedPreferences: SharedPreferences,
     modifier: Modifier = Modifier
 ) {
+    //already safes variables in mutalStateOf
     val context = LocalContext.current
     var vorname by remember { mutableStateOf(initialVorname) }
     var nachname by remember { mutableStateOf(initialNachname) }
@@ -121,11 +124,13 @@ fun Profile(
     var email by remember { mutableStateOf(initialEmail) }
     var isEmailValid by remember { mutableStateOf(true) }
 
+    //saving new inputs
     var newVorname by remember { mutableStateOf(initialVorname) }
     var newNachname by remember { mutableStateOf(initialNachname) }
     var newPassword by remember { mutableStateOf(initialPassword) }
     var newEmail by remember { mutableStateOf(initialEmail) }
 
+    //stores error and success message
     var errorMessage by remember { mutableStateOf("") }
     var successMessage by remember { mutableStateOf("") }
 
@@ -166,6 +171,8 @@ fun Profile(
                 .background(Color.White)
                 .padding(16.dp)
         ) {
+
+            //headline
             Text(
                 text = "Personenbezogene Daten",
                 style = MaterialTheme.typography.h5.copy(fontWeight = FontWeight.Bold),
@@ -174,6 +181,7 @@ fun Profile(
 
             Spacer(modifier = Modifier.height(16.dp))
 
+            //textfield for first name
             CustomTextField(
                 value = newVorname,
                 onValueChange = { newVorname = it },
@@ -183,6 +191,7 @@ fun Profile(
 
             Spacer(modifier = Modifier.height(16.dp))
 
+            //text field for last name
             CustomTextField(
                 value = newNachname,
                 onValueChange = { newNachname = it },
@@ -192,6 +201,7 @@ fun Profile(
 
             Spacer(modifier = Modifier.height(16.dp))
 
+            //text field for email
             CustomTextField(
                 value = newEmail,
                 onValueChange = {
@@ -204,6 +214,7 @@ fun Profile(
 
             Spacer(modifier = Modifier.height(16.dp))
 
+            //text field for password
             CustomTextField(
                 value = newPassword,
                 onValueChange = { newPassword = it },
@@ -211,8 +222,10 @@ fun Profile(
                 modifier = Modifier.fillMaxWidth().padding(16.dp)
             )
 
+
             Button(
                 onClick = {
+                    //checks if all tex fields have input otherwise diyplay error messages
                     when {
                         newVorname.isBlank() || newNachname.isBlank() || newPassword.isBlank() -> {
                             errorMessage = "Bitte füllen Sie alle Eingabefelder aus."
@@ -222,6 +235,8 @@ fun Profile(
                             errorMessage = "Bitte geben Sie eine gültige E-Mail-Adresse ein."
                             successMessage = ""
                         }
+
+                        //change variables which where typed in and save them in shared Preferences
                         else -> {
                             vorname = newVorname
                             nachname = newNachname
@@ -234,11 +249,15 @@ fun Profile(
                                 putString("email", email)
                                 apply()
                             }
+                            //clear any existing error messages
                             errorMessage = ""
+                            //show success message if everything is fine
                             successMessage = "Daten wurden erfolgreich geändert."
                         }
                     }
                 },
+
+                //button design
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(5.dp),
@@ -247,12 +266,15 @@ fun Profile(
                 Text(text = "Ändern", color = Color.White)
             }
 
+            //invisable boy where the error/success messages are displayed
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(8.dp),
                 contentAlignment = Alignment.Center
             ) {
+
+                //modifier settings if error message exists
                 when {
                     errorMessage.isNotEmpty() -> {
                         Text(
@@ -263,6 +285,8 @@ fun Profile(
                             style = MaterialTheme.typography.body1,
                         )
                     }
+
+                    //modifier settings if success message exists
                     successMessage.isNotEmpty() -> {
                         Text(
                             text = successMessage,

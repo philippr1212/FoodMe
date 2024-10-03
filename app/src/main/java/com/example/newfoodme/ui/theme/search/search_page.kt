@@ -50,7 +50,8 @@ class SearchPageActivity : ComponentActivity() {
 
 
 
-    //comment beginn---------------------------------------------------------------------------------
+
+    //KI generated begin---------------------------------------------------------------------------------
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private var userLocation: LatLng? = null
 
@@ -398,6 +399,7 @@ class SearchPageActivity : ComponentActivity() {
     }
 }
 
+//calculate distance from your current location
 fun calculateDistanceInKm(lat1: Double, lon1: Double, lat2: Double, lon2: Double): Double {
     val earthRadiusKm = 6371.0
 
@@ -423,7 +425,9 @@ fun SearchScreen(
     userLocation: LatLng?,
     exampleMarkers: List<Pair<LatLng, String>>
 )
-//comment end----------------------------------------------------------------------------
+//KI generated end---------------------------------------------------------------------------------
+
+
 
 
 
@@ -533,6 +537,8 @@ fun SearchScreen(
             }
         }
     )
+
+
 
 
     //all content on the page
@@ -747,6 +753,8 @@ fun SearchScreen(
             title = { Text(text = "Vorbestellung") },
             text = {
                 Column {
+
+                    //user should choose a date
                     Text(text = "Wählen Sie ein Datum:")
                     Button(onClick = {
                         val calendar = Calendar.getInstance()
@@ -770,6 +778,7 @@ fun SearchScreen(
 
                     Spacer(modifier = Modifier.height(16.dp))
 
+                    //user should choose a time
                     Text(text = "Wählen Sie eine Uhrzeit:")
                     Button(onClick = {
                         val calendar = Calendar.getInstance()
@@ -877,6 +886,8 @@ fun SearchScreen(
             title = { Text(text = "Tisch reservieren") },
             text = {
                 Column {
+
+                    //user should choose a date
                     Text(text = "Wählen Sie ein Datum:")
                     Button(onClick = {
                         val calendar = Calendar.getInstance()
@@ -900,6 +911,7 @@ fun SearchScreen(
 
                     Spacer(modifier = Modifier.height(16.dp))
 
+                    //user should choose a time
                     Text(text = "Wählen Sie eine Uhrzeit:")
                     Button(onClick = {
                         val calendar = Calendar.getInstance()
@@ -915,6 +927,7 @@ fun SearchScreen(
                                     set(Calendar.MINUTE, minute)
                                 }
 
+                                //if time in the past was choosen; maybe not relevant anymore because it was deactivated
                                 if (selectedDateTime.before(now)) {
                                     errorMessage = "Sie können keine Zeit in der Vergangenheit auswählen."
                                     showErrorDialog = true
@@ -1024,6 +1037,7 @@ fun SearchScreen(
     }
 }
 
+//displays the current distance to each local based on the suers current location
 @Composable
 fun MarkerItem(marker: Triple<LatLng, String, Double>, onClick: () -> Unit) {
     Column(
@@ -1083,6 +1097,7 @@ fun IndividualClickableBox(
     onSelectionChanged: (Boolean) -> Unit
 
 ) {
+    //edges color of each box if selected or not
     val borderColor by animateColorAsState(
         targetValue = if (isSelected) Color.Green else Color.Black, label = ""
     )
