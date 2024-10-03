@@ -720,7 +720,6 @@ fun SearchScreen(
                                 context.startActivity(
                                     Intent(context, SearchPageActivity::class.java).apply {
                                         putExtra("locationTitle", sortedMarkers[index].second)
-                                        putExtra("infoText", "Some additional info about this place")
                                     }
                                 )
                             })
