@@ -35,7 +35,6 @@ class MainActivity : ComponentActivity() {
         setContent {
             NewFoodMeTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    // Hier wird das LoginScreen-Layout gerendert
                     LoginScreen(modifier = Modifier.padding(innerPadding))
                 }
             }
