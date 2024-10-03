@@ -51,6 +51,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.lifecycleScope
 import com.example.newfoodme.R
 import com.example.newfoodme.ui.theme.profil.ProfileActivity
 import com.example.newfoodme.ui.theme.search.SearchPageActivity
@@ -62,6 +63,7 @@ import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.model.*
+import kotlinx.coroutines.launch
 import androidx.compose.ui.graphics.Color as AppColor
 
 //Creating class "HomePageActivity"
@@ -87,7 +89,7 @@ class HomePageActivity : ComponentActivity(), OnMapReadyCallback { //HomepageAct
     private var permissionsGranted = false //Saves the permissions for the locstion of the users
     private var mapReady = false // Map ready for interaction
 
-    //Creating a list of example markers (restaurants, cafes and bars)
+//-------------------Creating a list of example markers (restaurants, cafes and bars) with AI (artificial inelligence)------------------------------------------------------------------------------------
     private val restaurants = listOf(
         MarkerOptions().position(LatLng(53.5416, 9.9911)).title("Vlet in der Speicherstadt").snippet("Restaurant"),
         MarkerOptions().position(LatLng(53.5588, 9.9814)).title("Henssler Henssler").snippet("Restaurant"),
@@ -380,7 +382,7 @@ class HomePageActivity : ComponentActivity(), OnMapReadyCallback { //HomepageAct
         MarkerOptions().position(LatLng(53.5518, 9.9701)).title("Schwaben Bar").snippet("Bar"),
         MarkerOptions().position(LatLng(53.5535, 9.9715)).title("Bar Seeterrasse").snippet("Bar")
     )
-
+//-----------------------------------End of the list---------------------------------------------------------------------------------------------------------
 
     //Suppression of the lint-warning for barrier-free jot
     @SuppressLint("ClickableViewAccessibility")
@@ -981,55 +983,57 @@ class HomePageActivity : ComponentActivity(), OnMapReadyCallback { //HomepageAct
     //Lint-warning for missing permission
     @SuppressLint("MissingPermission")
     private fun getCurrentLocation() { //Checks if there is a permission for the location, if not, there is fallback location in Hamburg
-        if (!this::googleMap.isInitialized) {
-            return
-        }
-
-        if (ActivityCompat.checkSelfPermission(
-                this,
-                Manifest.permission.ACCESS_FINE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
-                this,
-                Manifest.permission.ACCESS_COARSE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
-            return
-        }
-
-        // New location request
-        val locationRequest = LocationRequest.Builder(Priority.PRIORITY_HIGH_ACCURACY, 0).apply {
-            setMaxUpdates(1) // Just one location update !!!
-        }.build()
-
-        val locationCallback = object : com.google.android.gms.location.LocationCallback() {
-            override fun onLocationResult(locationResult: com.google.android.gms.location.LocationResult) {
-                val location = locationResult.lastLocation
-                if (location != null) {
-                    val currentLatLng = LatLng(location.latitude, location.longitude)
-                    runOnUiThread {
-                        googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(currentLatLng, 15f))
-
-                        //Customizing the position marker
-                        val circleOptions = CircleOptions()
-                            .center(currentLatLng)
-                            .fillColor(AppColor(0x400000FF).toArgb())
-                            .strokeWidth(2f)
-
-                        googleMap.addCircle(circleOptions)
-                    }
-                } else {
-                    Log.e("LocationError", "Location is null")
-                    val fallbackLatLng = LatLng(53.5511, 9.9937)
-                    runOnUiThread {
-                        showFallbackLocation(fallbackLatLng)
-                    }
-                }
-                // Remove location updates
-                fusedLocationClient.removeLocationUpdates(this)
+        lifecycleScope.launch { //Helps by running the task asynchronous
+            if (!this@HomePageActivity::googleMap.isInitialized) {
+                return@launch
             }
-        }
 
-        fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, Looper.getMainLooper())
+            if (ActivityCompat.checkSelfPermission(
+                    this@HomePageActivity,
+                    Manifest.permission.ACCESS_FINE_LOCATION
+                ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                    this@HomePageActivity,
+                    Manifest.permission.ACCESS_COARSE_LOCATION
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+                return@launch
+            }
+
+            // New location request
+            val locationRequest = LocationRequest.Builder(Priority.PRIORITY_HIGH_ACCURACY, 0).apply {
+                setMaxUpdates(1) // Just one location update !!!
+            }.build()
+
+            val locationCallback = object : com.google.android.gms.location.LocationCallback() {
+                override fun onLocationResult(locationResult: com.google.android.gms.location.LocationResult) {
+                    val location = locationResult.lastLocation
+                    if (location != null) {
+                        val currentLatLng = LatLng(location.latitude, location.longitude)
+                        runOnUiThread {
+                            googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(currentLatLng, 15f))
+
+                            // Customizing the position marker
+                            val circleOptions = CircleOptions()
+                                .center(currentLatLng)
+                                .fillColor(AppColor(0x400000FF).toArgb())
+                                .strokeWidth(2f)
+
+                            googleMap.addCircle(circleOptions)
+                        }
+                    } else {
+                        Log.e("LocationError", "Location is null")
+                        val fallbackLatLng = LatLng(53.5511, 9.9937)
+                        runOnUiThread {
+                            showFallbackLocation(fallbackLatLng)
+                        }
+                    }
+                    // Remove location updates
+                    fusedLocationClient.removeLocationUpdates(this)
+                }
+            }
+
+            fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, Looper.getMainLooper())
+        }
     }
 
 

@@ -1,5 +1,6 @@
 package com.example.newfoodme.ui.theme.profil
 
+// Import of different android, compose and some individuals (libraries)
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -9,6 +10,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
+//noinspection UsingMaterialAndMaterial3Libraries
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
@@ -22,8 +24,8 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import com.example.newfoodme.ui.theme.login.MainActivity
 import com.example.newfoodme.ui.theme.search.SearchPageActivity
 import com.example.newfoodme.ui.theme.home.HomePageActivity
-import com.example.newfoodme.ui.theme.peopleData.ProfileActivity
 
+// Create a class "ProfileActivity" that inherits from the ComponentActivity
 class ProfileActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -57,7 +59,7 @@ fun Profile(vorname: String, nachname: String, modifier: Modifier = Modifier) {
 
     Column(modifier = Modifier.fillMaxSize()) {
 
-        // Header
+        // Header with the username
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -82,8 +84,9 @@ fun Profile(vorname: String, nachname: String, modifier: Modifier = Modifier) {
             }
         }
 
-        // Main part
+        // Main part with all the profile items
         Column(
+            //Customizing the main part
             modifier = Modifier
                 .weight(1f)
                 .fillMaxWidth()
@@ -132,13 +135,14 @@ fun Profile(vorname: String, nachname: String, modifier: Modifier = Modifier) {
             ProfileItem(icon = Icons.Default.Description, title = "AGB")
         }
 
-        // Logout Button
+        // Logout Button that sends the user back to the Login
         Button(
             onClick = {
                 val intent = Intent(context, MainActivity::class.java)
                 intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                 context.startActivity(intent)
             },
+            //Customizing the logout button
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(16.dp),
@@ -147,22 +151,25 @@ fun Profile(vorname: String, nachname: String, modifier: Modifier = Modifier) {
             Text(text = "Abmelden", color = Color.White)
         }
 
-        // Footer mit der Bottom Navigation
+        // Navigation for the user to (Homepage, Search page and Profil page)
         BottomNavigation(
             backgroundColor = Color(0xFFFFA500)
         ) {
+            //Navigate to Homepage
             BottomNavigationItem(
                 icon = { Icon(Icons.Default.Home, contentDescription = "Entdecke") },
                 label = { Text("Entdecke") },
                 selected = false,
                 onClick = { context.startActivity(Intent(context, HomePageActivity::class.java)) }
             )
+            //Navigate to Search page
             BottomNavigationItem(
                 icon = { Icon(Icons.Default.Search, contentDescription = "Suche") },
                 label = { Text("Suche") },
                 selected = false,
                 onClick = { context.startActivity(Intent(context, SearchPageActivity::class.java)) }
             )
+            //Navigate to Profil page
             BottomNavigationItem(
                 icon = { Icon(Icons.Default.Person, contentDescription = "Mein Profil") },
                 label = { Text("Mein Profil") },
@@ -173,15 +180,18 @@ fun Profile(vorname: String, nachname: String, modifier: Modifier = Modifier) {
     }
 }
 
+//UI-Element with icon and title for all the profile items + Customizing the items
 @Composable
 fun ProfileItem(icon: ImageVector, title: String, onClick: () -> Unit = {}) {
     Row(
+        //Customizing
         modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = 8.dp)
             .clickable(onClick = onClick),
         verticalAlignment = Alignment.CenterVertically
     ) {
+        //Customizing the icon
         Icon(
             imageVector = icon,
             contentDescription = title,

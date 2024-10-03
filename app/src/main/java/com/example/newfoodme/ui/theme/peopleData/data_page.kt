@@ -9,6 +9,7 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
+//noinspection UsingMaterialAndMaterial3Libraries
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
@@ -117,7 +118,7 @@ fun Profile(
     modifier: Modifier = Modifier
 ) {
     //already safes variables in mutalStateOf
-    val context = LocalContext.current
+    LocalContext.current
     var vorname by remember { mutableStateOf(initialVorname) }
     var nachname by remember { mutableStateOf(initialNachname) }
     var password by remember { mutableStateOf(initialPassword) }

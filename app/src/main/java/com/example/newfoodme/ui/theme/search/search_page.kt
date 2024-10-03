@@ -18,11 +18,17 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+//noinspection UsingMaterialAndMaterial3Libraries
 import androidx.compose.material.*
+//noinspection UsingMaterialAndMaterial3Libraries
 import androidx.compose.material.BottomNavigation
+//noinspection UsingMaterialAndMaterial3Libraries
 import androidx.compose.material.BottomNavigationItem
+//noinspection UsingMaterialAndMaterial3Libraries
 import androidx.compose.material.Button
+//noinspection UsingMaterialAndMaterial3Libraries
 import androidx.compose.material.Icon
+//noinspection UsingMaterialAndMaterial3Libraries
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
@@ -433,11 +439,10 @@ fun SearchScreen(
 
 
 {
-    var vorname by remember { mutableStateOf(initialVorname) } // stores the users first name
-    var nachname by remember { mutableStateOf(initialNachname) } // stores the users last name
+    val vorname by remember { mutableStateOf(initialVorname) } // stores the users first name
+    val nachname by remember { mutableStateOf(initialNachname) } // stores the users last name
 
     // booleans to control if dialogs are shown or not
-    var showTimeAndPersonDialog by remember { mutableStateOf(false) } //shows or hides the dialog to choose the time and number of people for "Tischreservierung"
     var showConfirmReservationDialog by remember { mutableStateOf(false) } //shows or hides the dialog to confirm the reservation
     var showResultDialog by remember { mutableStateOf(false) } // shows or hides the result dialog
     var showOrderDialog by remember { mutableStateOf(false) } // shows or hides the order dialog
@@ -453,7 +458,7 @@ fun SearchScreen(
     // reservation details
     var selectedTime by remember { mutableStateOf("") } // Stores the selected time for the reservation
     var selectedDate by remember { mutableStateOf("") } //stores the selected date for the reservation
-    var numberOfPersons by remember { mutableStateOf(1) } // stores the number of people for the reservation
+    var numberOfPersons by remember { mutableIntStateOf(1) } // stores the number of people for the reservation
     var resultMessage by remember { mutableStateOf<String?>(null) } // stores the message to be shown in the result dialog
     var resultTextColor by remember { mutableStateOf(Color.Black) } // stores the color of the result text
 
@@ -462,9 +467,9 @@ fun SearchScreen(
     var selectedMenus by remember { mutableStateOf(List(totalMenus) { false }) } //identifies which menus are selected
 
     // selected date for validation
-    var selectedYear by remember { mutableStateOf(0) } // stores the selected year to validate the reservation date
-    var selectedMonth by remember { mutableStateOf(0) } //Stores the selected month to validate the reservation date
-    var selectedDay by remember { mutableStateOf(0) } // stores the selected day to validate the reservation date
+    var selectedYear by remember { mutableIntStateOf(0) } // stores the selected year to validate the reservation date
+    var selectedMonth by remember { mutableIntStateOf(0) } //Stores the selected month to validate the reservation date
+    var selectedDay by remember { mutableIntStateOf(0) } // stores the selected day to validate the reservation date
 
     val context = LocalContext.current
 
@@ -509,7 +514,7 @@ fun SearchScreen(
                 elevation = 10.dp
             ) {
                 BottomNavigationItem(
-                    icon = { Icon(Icons.Default.Place, contentDescription = "Entdecke") },
+                    icon = { Icon(Icons.Default.Home, contentDescription = "Entdecke") },
                     label = { Text("Entdecke") },
                     selected = false,
                     onClick = {
@@ -720,6 +725,7 @@ fun SearchScreen(
                                 context.startActivity(
                                     Intent(context, SearchPageActivity::class.java).apply {
                                         putExtra("locationTitle", sortedMarkers[index].second)
+                                        putExtra("infoText", "Information about ${sortedMarkers[index].second}")
                                     }
                                 )
                             })

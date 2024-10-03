@@ -39,6 +39,7 @@ class RegistrationActivity : ComponentActivity() {
     }
 }
 
+@Suppress("DEPRECATION", "NAME_SHADOWING")
 @Composable
 fun RegistrationScreen(modifier: Modifier = Modifier) {
     val context = LocalContext.current
@@ -51,16 +52,6 @@ fun RegistrationScreen(modifier: Modifier = Modifier) {
     var passwort by remember { mutableStateOf(sharedPreferences.getString("passwort", "") ?: "") }
     var isEmailValid by remember { mutableStateOf(true) }
 
-
-    //checks if the name has min. 3 letters
-    fun isValidName(name: String): Boolean {
-        return name.length >= 3
-    }
-
-    //checks if the password has min. 8 characters and at least 1 digit
-    fun isValidPassword(password: String): Boolean {
-        return password.length >= 8 && password.any { it.isDigit() }
-    }
 
     //checks if there is an valid email address
     fun isValidEmail(email: String): Boolean {
