@@ -1,13 +1,13 @@
 package com.example.newfoodme.ui.theme.home
 
 // Import of different android, compose and some individuals (libraries)
+//noinspection UsingMaterialAndMaterial3Libraries
 import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
-import android.os.Looper
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.MotionEvent
@@ -22,15 +22,56 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
 //noinspection UsingMaterialAndMaterial3Libraries
-import androidx.compose.material.*
+import androidx.compose.material.BottomNavigation
+//noinspection UsingMaterialAndMaterial3Libraries
+import androidx.compose.material.BottomNavigationItem
+//noinspection UsingMaterialAndMaterial3Libraries
+import androidx.compose.material.DropdownMenu
+//noinspection UsingMaterialAndMaterial3Libraries
+import androidx.compose.material.DropdownMenuItem
+//noinspection UsingMaterialAndMaterial3Libraries
+import androidx.compose.material.FloatingActionButton
+//noinspection UsingMaterialAndMaterial3Libraries
+import androidx.compose.material.Icon
+//noinspection UsingMaterialAndMaterial3Libraries
+import androidx.compose.material.IconButton
+//noinspection UsingMaterialAndMaterial3Libraries
+import androidx.compose.material.MaterialTheme
+//noinspection UsingMaterialAndMaterial3Libraries
+import androidx.compose.material.Scaffold
+//noinspection UsingMaterialAndMaterial3Libraries
+import androidx.compose.material.Switch
+//noinspection UsingMaterialAndMaterial3Libraries
+import androidx.compose.material.Text
+//noinspection UsingMaterialAndMaterial3Libraries
+import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.*
-import androidx.compose.runtime.*
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.Remove
+import androidx.compose.material.icons.filled.Search
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
@@ -51,19 +92,20 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.lifecycleScope
 import com.example.newfoodme.R
 import com.example.newfoodme.ui.theme.profil.ProfileActivity
 import com.example.newfoodme.ui.theme.search.SearchPageActivity
 import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.Priority
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
-import com.google.android.gms.maps.model.*
-import kotlinx.coroutines.launch
+import com.google.android.gms.maps.model.CircleOptions
+import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.MapStyleOptions
+import com.google.android.gms.maps.model.Marker
+import com.google.android.gms.maps.model.MarkerOptions
 import androidx.compose.ui.graphics.Color as AppColor
 
 //Creating class "HomePageActivity"
@@ -717,8 +759,10 @@ class HomePageActivity : ComponentActivity(), OnMapReadyCallback { //HomepageAct
                         Manifest.permission.ACCESS_COARSE_LOCATION
                     )
                 )
-            }
+            } else {
+                permissionsGranted = true
         }
+    }
 
         //Prepare markers for the map
         private fun prepareMarkers() {
@@ -982,60 +1026,51 @@ class HomePageActivity : ComponentActivity(), OnMapReadyCallback { //HomepageAct
 
     //Lint-warning for missing permission
     @SuppressLint("MissingPermission")
-    private fun getCurrentLocation() { //Checks if there is a permission for the location, if not, there is fallback location in Hamburg
-        lifecycleScope.launch { //Helps by running the task asynchronous
-            if (!this@HomePageActivity::googleMap.isInitialized) {
-                return@launch
-            }
+    private fun getCurrentLocation() {  //Checks if there is a permission for the location, if not, there is fallback location in Hamburg
+        if (!this::googleMap.isInitialized) { //If Google Map is not initialized, the function gets canceled
+            return
+        }
 
-            if (ActivityCompat.checkSelfPermission(
-                    this@HomePageActivity,
-                    Manifest.permission.ACCESS_FINE_LOCATION
-                ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
-                    this@HomePageActivity,
-                    Manifest.permission.ACCESS_COARSE_LOCATION
-                ) != PackageManager.PERMISSION_GRANTED
-            ) {
-                return@launch
-            }
+        //Checks the permission for the location
+        if (ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            return
+        }
 
-            // New location request
-            val locationRequest = LocationRequest.Builder(Priority.PRIORITY_HIGH_ACCURACY, 0).apply {
-                setMaxUpdates(1) // Just one location update !!!
-            }.build()
+        //Getting the exact location of the user
+        fusedLocationClient.getCurrentLocation(Priority.PRIORITY_HIGH_ACCURACY, null)
+            .addOnSuccessListener { location ->
+                if (location != null) {
+                    val currentLatLng = LatLng(location.latitude, location.longitude)
+                    googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(currentLatLng, 15f))
 
-            val locationCallback = object : com.google.android.gms.location.LocationCallback() {
-                override fun onLocationResult(locationResult: com.google.android.gms.location.LocationResult) {
-                    val location = locationResult.lastLocation
-                    if (location != null) {
-                        val currentLatLng = LatLng(location.latitude, location.longitude)
-                        runOnUiThread {
-                            googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(currentLatLng, 15f))
+                    // Customizing the position marker
+                    val circleOptions = CircleOptions()
+                        .center(currentLatLng)
+                        .fillColor(AppColor(0x400000FF).toArgb())
+                        .strokeWidth(2f)
 
-                            // Customizing the position marker
-                            val circleOptions = CircleOptions()
-                                .center(currentLatLng)
-                                .fillColor(AppColor(0x400000FF).toArgb())
-                                .strokeWidth(2f)
-
-                            googleMap.addCircle(circleOptions)
-                        }
-                    } else {
-                        Log.e("LocationError", "Location is null")
-                        val fallbackLatLng = LatLng(53.5511, 9.9937)
-                        runOnUiThread {
-                            showFallbackLocation(fallbackLatLng)
-                        }
-                    }
-                    // Remove location updates
-                    fusedLocationClient.removeLocationUpdates(this)
+                    googleMap.addCircle(circleOptions)
+                } else {
+                    Log.e("LocationError", "Location is null")
+                    val fallbackLatLng = LatLng(53.5511, 9.9937) //Fallback location, when location information is null
+                    googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(fallbackLatLng, 16f))
+                    showFallbackLocation(fallbackLatLng)
                 }
             }
-
-            fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, Looper.getMainLooper())
-        }
+            .addOnFailureListener { exception ->
+                Log.e("LocationError", "Error getting location", exception)
+                val fallbackLatLng = LatLng(53.5511, 9.9937)
+                googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(fallbackLatLng, 16f))
+                showFallbackLocation(fallbackLatLng)
+            }
     }
-
 
     //Customizing the fallback location
     private fun showFallbackLocation(location: LatLng) {
