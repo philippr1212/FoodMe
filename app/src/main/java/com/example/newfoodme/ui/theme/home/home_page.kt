@@ -920,7 +920,7 @@ class HomePageActivity : ComponentActivity(), OnMapReadyCallback { //HomepageAct
                     googleMap.isMyLocationEnabled = true
                     getCurrentLocation()
                 } else {
-                    showFallbackLocation(hamburg)
+                    finish()
                 }
             }
 
@@ -931,6 +931,7 @@ class HomePageActivity : ComponentActivity(), OnMapReadyCallback { //HomepageAct
                 true
             }
         }
+
 
     //Updating markers based on using the filters
     private fun updateMarkers() {
@@ -1058,32 +1059,9 @@ class HomePageActivity : ComponentActivity(), OnMapReadyCallback { //HomepageAct
 
                     googleMap.addCircle(circleOptions)
                 } else {
-                    Log.e("LocationError", "Location is null")
-                    val fallbackLatLng = LatLng(53.5511, 9.9937) //Fallback location, when location information is null
-                    googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(fallbackLatLng, 16f))
-                    showFallbackLocation(fallbackLatLng)
+                    finish()
                 }
             }
-            .addOnFailureListener { exception ->
-                Log.e("LocationError", "Error getting location", exception)
-                val fallbackLatLng = LatLng(53.5511, 9.9937)
-                googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(fallbackLatLng, 16f))
-                showFallbackLocation(fallbackLatLng)
-            }
-    }
-
-    //Customizing the fallback location
-    private fun showFallbackLocation(location: LatLng) {
-            if (!this::googleMap.isInitialized) {
-                return
-            }
-            val circleOptions = CircleOptions()
-                .center(location)
-                .fillColor(AppColor(0x400000FF).toArgb())
-                .strokeWidth(2f)
-
-            googleMap.addCircle(circleOptions)
-            googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(location, 18f))
         }
 
         override fun onResume() {
