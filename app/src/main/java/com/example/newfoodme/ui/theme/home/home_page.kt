@@ -973,13 +973,21 @@ class HomePageActivity : ComponentActivity(), OnMapReadyCallback { //HomepageAct
             }.values
 
             queryMarkers.forEach {
-                val marker = googleMap.addMarker(it)
-                if (marker != null) {
-                    markerReferences[marker.title ?: ""] = marker
+                // Marker fits the filter options ?
+                val snippet = it.snippet
+                if ((snippet == "Restaurant" && showRestaurants) ||
+                    (snippet == "Café" && showCafes) ||
+                    (snippet == "Bar" && showBars)
+                ) {
+                    val marker = googleMap.addMarker(it)
+                    if (marker != null) {
+                        markerReferences[marker.title ?: ""] = marker
+                    }
                 }
             }
         }
     }
+
 
         //Generates a list of suggestions
         private fun updateSuggestions() {
